@@ -117,5 +117,4 @@ while running:
     person.bliting()
     pygame.display.update((0,0,screen_width,screen_height))
     clock.tick(fps)
-#я блядь ненавижу эту ебаную хуеты под название гит
-# эта хуетень только что мне удалила целую ветку!!!
+#просто для проверки работоспособности
