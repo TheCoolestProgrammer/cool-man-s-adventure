@@ -158,6 +158,10 @@ class Main_menu():
             self.button_up = Main_menu_object(1)
             self.button_down = Main_menu_object(2)
             self.active_button = 0
+            self.animation_active = False
+            self.now_frame =1
+            self.counter_tics = 0
+            self.tics = fps/12
     def bliting(self):
         if self.slide==0:
             screen.blit(self.background,(0,0))
@@ -172,7 +176,30 @@ class Main_menu():
             elif self.active_button==3:
                 text = font.render("EXIT", True, (0, 255, 0))
             screen.blit(text, (screen_width//8*3, 520))
+            self.animation_up = False
 
+    def animation(self):
+        if self.slide == 0:
+            if self.animation_active:
+                if self.counter_tics == 0:
+                    if self.animation_up:
+                        self.now_frame = 11
+                        self.max_frames = 1
+                        self.speed_animation = -1
+                    else:
+                        self.now_frame = 1
+                        self.max_frames = 12
+                        self.speed_animation = 1
+                if self.counter_tics >= self.tics:
+                    self.counter_tics = 0
+                    self.button.image = pygame.image.load(f"data/menu_button_animation{self.now_frame % 12 + self.speed_animation}.png")
+                    self.now_frame += self.speed_animation
+                self.counter_tics += 1
+
+                if self.now_frame == self.max_frames:
+                    self.animation_active = False
+                    self.counter_tics = 0
+                    self.animation_up=False
 running = True
 pygame.init()
 pygame.display.set_caption('the cool man adventure')
@@ -240,12 +267,23 @@ else:
                     x,y = pygame.mouse.get_pos()
                     mouse = Main_menu_object(-1,x,y)
                     if menu.slide==0:
-                        if pygame.sprite.collide_mask(menu.button_up,mouse):
-                            print("moving up")
-                        elif pygame.sprite.collide_mask(menu.button_down,mouse):
-                            print("moving down")
-                        elif pygame.sprite.collide_mask(menu.button,mouse):
-                            print("go to level or sth")
+                        if not menu.animation_active:
+                            if pygame.sprite.collide_mask(menu.button_up,mouse):
+                                print("moving up")
+                                menu.active_button +=1
+                                menu.active_button%= 4
+                                menu.animation_active=True
+                                menu.animation_up = True
+                            elif pygame.sprite.collide_mask(menu.button_down,mouse):
+                                print("moving down")
+                                menu.active_button -= 1
+                                menu.active_button %= 4
+                                menu.animation_active = True
+                                menu.animation_up=False
+                            elif pygame.sprite.collide_mask(menu.button,mouse):
+                                print("go to level or sth")
+        if menu.animation_active:
+            menu.animation()
         menu.bliting()
         pygame.display.update((0, 0, screen_width, screen_height))
         clock.tick(fps)
