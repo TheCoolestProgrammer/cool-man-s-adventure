@@ -124,11 +124,16 @@ class Main_menu():
             self.background = pygame.Surface.convert_alpha(self.background)
             self.button = pygame.image.load("data/menu_button.png")
             self.button = pygame.Surface.convert_alpha(self.button)
+            self.button_up = pygame.image.load("data/menu_button_up_down.png")
+            self.button_up = pygame.Surface.convert_alpha(self.button_up)
+            self.button_down = pygame.transform.flip(self.button_up,False,True)
 
     def bliting(self):
         if self.slide==0:
             screen.blit(self.background,(0,0))
             screen.blit(self.button,(screen_width//2-(self.button.get_width()//2), 500))
+            screen.blit(self.button_up,(screen_width//2-(self.button_up.get_width()//2), 400))
+            screen.blit(self.button_down,(screen_width//2-(self.button_up.get_width()//2), 650))
 running = True
 pygame.init()
 pygame.display.set_caption('the cool man adventure')
