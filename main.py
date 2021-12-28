@@ -5,6 +5,7 @@ class Background():
     def load_background(self,level):
         if level==0:
             self.background = pygame.image.load("data/background2.png")
+        self.background = pygame.Surface.convert_alpha(self.background)
         self.position_x = 0
         self.position_y = 0
         self.speed = 3
@@ -121,7 +122,7 @@ pygame.init()
 pygame.display.set_caption('the cool man adventure')
 screen_width, screen_height = 1280, 720
 screen = pygame.display.set_mode((screen_width, screen_height))
-fps = 60
+fps = 120
 clock = pygame.time.Clock()
 
 background = Background()
@@ -155,12 +156,13 @@ while running:
                 person.now_frame=0
                 person.counter_tics = 0
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        background.position_x += background.speed
-    elif keys[pygame.K_RIGHT]:
-        background.position_x -= background.speed
+    if person.walk:
+        if keys[pygame.K_LEFT]:
+            background.position_x += background.speed
+        elif keys[pygame.K_RIGHT]:
+            background.position_x -= background.speed
 
-    #screen.fill((0, 0, 0))
+    screen.fill((0, 0, 0))
     background.bliting()
     person.bliting()
     pygame.display.update((0,0,screen_width,screen_height))
