@@ -1,6 +1,5 @@
 import pygame
 
-
 class Background():
     def load_background(self,level):
         if level==0:
@@ -11,6 +10,7 @@ class Background():
         self.speed = 3
     def bliting(self):
         screen.blit(self.background, (self.position_x, self.position_y))
+
 class Person():
     def load_person(self,person):
         if person ==0:
@@ -115,7 +115,6 @@ class Person():
                     # self.tics = fps//len(self.walk_right_animation)
                     if not self.look_right:
                         self.position_x += self.normal_weapon_punch_left_animation[0].get_width() - self.person.get_width()
-
 
 running = True
 pygame.init()
