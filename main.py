@@ -116,6 +116,19 @@ class Person():
                     if not self.look_right:
                         self.position_x += self.normal_weapon_punch_left_animation[0].get_width() - self.person.get_width()
 
+class Main_menu():
+    def load_image(self,slide):
+        self.slide = slide
+        if self.slide ==0:
+            self.background = pygame.image.load("data/menu_background.png")
+            self.background = pygame.Surface.convert_alpha(self.background)
+            self.button = pygame.image.load("data/menu_button.png")
+            self.button = pygame.Surface.convert_alpha(self.button)
+
+    def bliting(self):
+        if self.slide==0:
+            screen.blit(self.background,(0,0))
+            screen.blit(self.button,(screen_width//2-(self.button.get_width()//2), 500))
 running = True
 pygame.init()
 pygame.display.set_caption('the cool man adventure')
@@ -124,46 +137,58 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 fps = 120
 clock = pygame.time.Clock()
 
-background = Background()
-background.load_background(0)
-person = Person()
-person.load_person(0)
+game_mode = 0
+if game_mode==1:
+    background = Background()
+    background.load_background(0)
+    person = Person()
+    person.load_person(0)
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if not person.animation_active:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        person.normal_weapon_punch = True
+                        person.animation_active = True
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RIGHT:
+                        person.look_right = True
+                        person.walk = True
+                        person.animation_active = True
 
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if not person.animation_active:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    person.normal_weapon_punch = True
-                    person.animation_active = True
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:
-                    person.look_right = True
-                    person.walk = True
-                    person.animation_active = True
+                    elif event.key == pygame.K_LEFT:
+                        person.look_right = False
+                        person.walk=True
+                        person.animation_active = True
+            elif event.type == pygame.KEYUP:
+                if person.walk:
+                    person.walk = False
+                    person.animation_active= False
+                    person.now_frame=0
+                    person.counter_tics = 0
+        keys = pygame.key.get_pressed()
+        if person.walk:
+            if keys[pygame.K_LEFT]:
+                background.position_x += background.speed
+            elif keys[pygame.K_RIGHT]:
+                background.position_x -= background.speed
 
-                elif event.key == pygame.K_LEFT:
-                    person.look_right = False
-                    person.walk=True
-                    person.animation_active = True
-        elif event.type == pygame.KEYUP:
-            if person.walk:
-                person.walk = False
-                person.animation_active= False
-                person.now_frame=0
-                person.counter_tics = 0
-    keys = pygame.key.get_pressed()
-    if person.walk:
-        if keys[pygame.K_LEFT]:
-            background.position_x += background.speed
-        elif keys[pygame.K_RIGHT]:
-            background.position_x -= background.speed
-
-    screen.fill((0, 0, 0))
-    background.bliting()
-    person.bliting()
-    pygame.display.update((0,0,screen_width,screen_height))
-    clock.tick(fps)
-    pygame.display.set_caption(str(clock.get_fps()))
+        screen.fill((0, 0, 0))
+        background.bliting()
+        person.bliting()
+        pygame.display.update((0,0,screen_width,screen_height))
+        clock.tick(fps)
+        pygame.display.set_caption(str(clock.get_fps()))
+else:
+    menu = Main_menu()
+    menu.load_image(0)
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        menu.bliting()
+        pygame.display.update((0, 0, screen_width, screen_height))
+        clock.tick(fps)
+        pygame.display.set_caption(str(clock.get_fps()))
