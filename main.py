@@ -210,81 +210,83 @@ clock = pygame.time.Clock()
 font = pygame.font.SysFont("Times New Roman", 50)
 
 game_mode = 0
+while running:
+    if game_mode==1:
+        background = Background()
+        background.load_background(0)
+        person = Person()
+        person.load_person(0)
+        while game_mode==1:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    game_mode=-1
+                if not person.animation_active:
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 1:
+                            person.normal_weapon_punch = True
+                            person.animation_active = True
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_RIGHT:
+                            person.look_right = True
+                            person.walk = True
+                            person.animation_active = True
 
-if game_mode==1:
-    background = Background()
-    background.load_background(0)
-    person = Person()
-    person.load_person(0)
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if not person.animation_active:
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                        elif event.key == pygame.K_LEFT:
+                            person.look_right = False
+                            person.walk=True
+                            person.animation_active = True
+                elif event.type == pygame.KEYUP:
+                    if person.walk:
+                        person.walk = False
+                        person.animation_active= False
+                        person.now_frame=0
+                        person.counter_tics = 0
+            keys = pygame.key.get_pressed()
+            if person.walk:
+                if keys[pygame.K_LEFT]:
+                    background.position_x += background.speed
+                elif keys[pygame.K_RIGHT]:
+                    background.position_x -= background.speed
+
+            screen.fill((0, 0, 0))
+            background.bliting()
+            person.bliting()
+            pygame.display.update((0,0,screen_width,screen_height))
+            clock.tick(fps)
+            pygame.display.set_caption(str(clock.get_fps()))
+    else:
+        all_sprites = pygame.sprite.Group()
+        menu = Main_menu()
+        menu.load_image(0)
+        while game_mode == 0:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                if event.type==pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        person.normal_weapon_punch = True
-                        person.animation_active = True
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RIGHT:
-                        person.look_right = True
-                        person.walk = True
-                        person.animation_active = True
+                        x,y = pygame.mouse.get_pos()
+                        mouse = Main_menu_object(-1,x,y)
+                        if menu.slide==0:
+                            if not menu.animation_active:
+                                if pygame.sprite.collide_mask(menu.button_up,mouse):
+                                    print("moving up")
+                                    menu.active_button +=1
+                                    menu.active_button%= 4
+                                    menu.animation_active=True
+                                    menu.animation_up = True
+                                elif pygame.sprite.collide_mask(menu.button_down,mouse):
+                                    print("moving down")
+                                    menu.active_button -= 1
+                                    menu.active_button %= 4
+                                    menu.animation_active = True
+                                    menu.animation_up=False
+                                elif pygame.sprite.collide_mask(menu.button,mouse):
+                                    game_mode=1
 
-                    elif event.key == pygame.K_LEFT:
-                        person.look_right = False
-                        person.walk=True
-                        person.animation_active = True
-            elif event.type == pygame.KEYUP:
-                if person.walk:
-                    person.walk = False
-                    person.animation_active= False
-                    person.now_frame=0
-                    person.counter_tics = 0
-        keys = pygame.key.get_pressed()
-        if person.walk:
-            if keys[pygame.K_LEFT]:
-                background.position_x += background.speed
-            elif keys[pygame.K_RIGHT]:
-                background.position_x -= background.speed
-
-        screen.fill((0, 0, 0))
-        background.bliting()
-        person.bliting()
-        pygame.display.update((0,0,screen_width,screen_height))
-        clock.tick(fps)
-        pygame.display.set_caption(str(clock.get_fps()))
-else:
-    all_sprites = pygame.sprite.Group()
-    menu = Main_menu()
-    menu.load_image(0)
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            if event.type==pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    x,y = pygame.mouse.get_pos()
-                    mouse = Main_menu_object(-1,x,y)
-                    if menu.slide==0:
-                        if not menu.animation_active:
-                            if pygame.sprite.collide_mask(menu.button_up,mouse):
-                                print("moving up")
-                                menu.active_button +=1
-                                menu.active_button%= 4
-                                menu.animation_active=True
-                                menu.animation_up = True
-                            elif pygame.sprite.collide_mask(menu.button_down,mouse):
-                                print("moving down")
-                                menu.active_button -= 1
-                                menu.active_button %= 4
-                                menu.animation_active = True
-                                menu.animation_up=False
-                            elif pygame.sprite.collide_mask(menu.button,mouse):
-                                print("go to level or sth")
-        if menu.animation_active:
-            menu.animation()
-        menu.bliting()
-        pygame.display.update((0, 0, screen_width, screen_height))
-        clock.tick(fps)
-        pygame.display.set_caption(str(clock.get_fps()))
+            if menu.animation_active:
+                menu.animation()
+            menu.bliting()
+            pygame.display.update((0, 0, screen_width, screen_height))
+            clock.tick(fps)
+            pygame.display.set_caption(str(clock.get_fps()))
