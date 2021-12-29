@@ -25,13 +25,14 @@ class Level_object(pygame.sprite.Sprite):
             self.walk = False
             self.animation_active = False
             self.speed = background.speed
+            self.person_number = person
         elif weapon:
             if weapon == 1:
                 self.image = pygame.image.load("data/sword.png")
                 self.image = pygame.Surface.convert_alpha(self.image)
             self.rect = self.image.get_rect()
             self.weapon=True
-        self.person_number = person
+            self.person_number = weapon
         self.rect.x =x
         self.rect.y = y
         self.mask = pygame.mask.from_surface(self.image)
@@ -40,30 +41,45 @@ class Level_object(pygame.sprite.Sprite):
         self.now_frame = 0
         self.counter_tics = 0
         self.tics = fps // 5 // 2
-
+        self.max_value_anim = 5
         all_sprites.add(self)
     def animation(self):
+
         if self.counter_tics >= self.tics:
             self.counter_tics = 0
             self.now_frame += 1
             if self.person_number==1:
                 if self.person:
                     if self.walk:
+                        self.max_value_anim = 5
                         self.image = pygame.image.load(f"data/person_walk_anim{self.now_frame%5+1}.png")
                     elif self.normal_weapon_punch:
+                        self.max_value_anim = 9
                         self.image = pygame.image.load(f"data/person_sword_punch{self.now_frame%9+1}.png")
-                elif self.weapon:
+                if self.weapon:
                     if self.normal_weapon_punch:
+                        self.max_value_anim = 9
                         self.image= pygame.image.load(f"data/sword_punch{self.now_frame%9+1}.png")
+                if self.max_value_anim==self.now_frame:
+                    self.now_frame=0
+                    self.counter_tics=0
+                    if self.normal_weapon_punch:
+                        self.animation_active=False
+                        self.normal_weapon_punch=False
+
+                    if self.person:
+
+                        self.image = pygame.image.load("data/person.png")
+                    elif self.weapon:
+                        self.image = pygame.image.load("data/sword.png")
 
         self.counter_tics += 1
 
-        #переставляем кадры
 class Level():
     def __init__(self,level):
         if level ==1:
-            x = screen_width // 2 - (350 // 2)
-            y = screen_height - 400 - 10
+            x = screen_width // 2 - 250
+            y = screen_height - 500
             self.person = Level_object(1,False,x,y)
             self.weapon = Level_object(False,1,x,y)
 
@@ -177,9 +193,11 @@ while running:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 1:
                             level.person.normal_weapon_punch = True
+                            level.weapon.normal_weapon_punch = True
                             level.person.animation_active = True
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RIGHT:
+
                             level.person.look_right = True
                             level.person.walk = True
                             level.person.animation_active = True
@@ -194,14 +212,18 @@ while running:
                         level.person.animation_active= False
                         level.person.now_frame=0
                         level.person.counter_tics = 0
+                        level.weapon.now_frame = 0
+                        level.weapon.counter_tics = 0
                         level.person.image=pygame.image.load("data/person.png")
             keys = pygame.key.get_pressed()
-            if level.person.walk:
-                if keys[pygame.K_LEFT]:
-                    background.position_x += background.speed
-                elif keys[pygame.K_RIGHT]:
-                    background.position_x -= background.speed
+
             if level.person.animation_active:
+                if level.person.walk:
+                    if keys[pygame.K_LEFT]:
+                        background.position_x += background.speed
+                    elif keys[pygame.K_RIGHT]:
+                        background.position_x -= background.speed
+
                 level.person.animation()
                 level.weapon.animation()
             screen.fill((0, 0, 0))
