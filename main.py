@@ -10,111 +10,63 @@ class Background():
         self.speed = 3
     def bliting(self):
         screen.blit(self.background, (self.position_x, self.position_y))
+class Level_object(pygame.sprite.Sprite):
 
-class Person():
-    def load_person(self,person):
-        if person ==0:
-            self.person = pygame.image.load("data/person.png")
-            self.person = pygame.Surface.convert_alpha(self.person)
-            self.person_look_left = pygame.transform.flip(self.person,True,False)
-            self.weapon = pygame.image.load("data/sword.png")
-            self.weapon = pygame.Surface.convert_alpha(self.weapon)
-            self.weapon_look_left = pygame.transform.flip(self.weapon,True,False)
-            self.look_right = True
-            self.walk_right_animation =[]
-            self.walk_left_animation = []
+    def __init__(self, person,weapon,x = 0,y=0):
+        super().__init__(all_sprites)
+        self.person = False
+        self.weapon = False
+        if person:
+            if person == 1:
+                self.image = pygame.image.load("data/person.png")
+                self.image = pygame.Surface.convert_alpha(self.image)
+            self.rect = self.image.get_rect()
+            self.person=True
             self.walk = False
-            self.normal_weapon_punch = False
-            self.now_frame= 0
-
             self.animation_active = False
-            for i in range(1,6):
-                a = pygame.image.load(f"data/person_walk_anim{i}.png")
-                a = pygame.Surface.convert_alpha(a)
-                self.walk_right_animation.append(a)
-                a = pygame.transform.flip(a,True,False)
-                a = pygame.Surface.convert_alpha(a)
-                self.walk_left_animation.append(a)
-            self.tics = fps // len(self.walk_right_animation)//2
-            self.counter_tics = 0
+            self.speed = background.speed
+        elif weapon:
+            if weapon == 1:
+                self.image = pygame.image.load("data/sword.png")
+                self.image = pygame.Surface.convert_alpha(self.image)
+            self.rect = self.image.get_rect()
+            self.weapon=True
+        self.person_number = person
+        self.rect.x =x
+        self.rect.y = y
+        self.mask = pygame.mask.from_surface(self.image)
+        self.look_right = True
+        self.normal_weapon_punch = False
+        self.now_frame = 0
+        self.counter_tics = 0
+        self.tics = fps // 5 // 2
 
-            self.person_normal_weapon_punch_right_animation = []
-            self.person_normal_weapon_punch_left_animation = []
-            self.normal_weapon_punch_right_animation = []
-            self.normal_weapon_punch_left_animation = []
-            for i in range(1,10):
-                a = pygame.image.load(f"data/person_sword_punch{i}.png")
-                a = pygame.Surface.convert_alpha(a)
-                self.person_normal_weapon_punch_right_animation.append(a)
-                a = pygame.transform.flip(a, True, False)
-                a = pygame.Surface.convert_alpha(a)
-                self.person_normal_weapon_punch_left_animation.append(a)
-            for i in range(1,10):
-                a = pygame.image.load(f"data/sword_punch{i}.png")
-                a = pygame.Surface.convert_alpha(a)
-                self.normal_weapon_punch_right_animation.append(a)
-                a = pygame.transform.flip(a, True, False)
-                a = pygame.Surface.convert_alpha(a)
-                self.normal_weapon_punch_left_animation.append(a)
-
-
-        self.position_x = screen_width//2-(self.person.get_width()//2)
-        self.position_y = screen_height-self.person.get_height()-10
-        self.speed = background.speed
-
-    def ticks_plus(self):
+        all_sprites.add(self)
+    def animation(self):
         if self.counter_tics >= self.tics:
             self.counter_tics = 0
             self.now_frame += 1
-            if not self.look_right:
-                pass
+            if self.person_number==1:
+                if self.person:
+                    if self.walk:
+                        self.image = pygame.image.load(f"data/person_walk_anim{self.now_frame%5+1}.png")
+                    elif self.normal_weapon_punch:
+                        self.image = pygame.image.load(f"data/person_sword_punch{self.now_frame%9+1}.png")
+                elif self.weapon:
+                    if self.normal_weapon_punch:
+                        self.image= pygame.image.load(f"data/sword_punch{self.now_frame%9+1}.png")
+
         self.counter_tics += 1
-    def bliting(self):
-        if  not self.animation_active:
-            if  self.look_right:
-                screen.blit(self.person, (self.position_x, self.position_y))
-                screen.blit(self.weapon, (self.position_x, self.position_y))
-            else:
-                screen.blit(self.person_look_left, (self.position_x, self.position_y))
-                screen.blit(self.weapon_look_left, (self.position_x-(self.weapon.get_width()-self.person.get_width()), self.position_y))
-        else:
-            if self.walk:
-                if self.look_right:
-                    self.ticks_plus()
-                    screen.blit(self.walk_right_animation[self.now_frame%5], (self.position_x, self.position_y))
-                    screen.blit(self.weapon, (self.position_x, self.position_y))
-                else:
-                    self.ticks_plus()
 
-                    screen.blit(self.walk_left_animation[self.now_frame%5], (self.position_x, self.position_y))
-                    screen.blit(self.weapon_look_left, (self.position_x-(self.weapon.get_width()-self.person.get_width()), self.position_y))
+        #переставляем кадры
+class Level():
+    def __init__(self,level):
+        if level ==1:
+            x = screen_width // 2 - (350 // 2)
+            y = screen_height - 400 - 10
+            self.person = Level_object(1,False,x,y)
+            self.weapon = Level_object(False,1,x,y)
 
-
-            elif self.normal_weapon_punch:
-                if self.counter_tics==0:
-                    # self.tics=fps//len(self.normal_weapon_punch_left_animation)
-                    self.position_y -= self.normal_weapon_punch_left_animation[0].get_height() - self.person.get_height()
-                    if not self.look_right:
-                        self.position_x -= self.normal_weapon_punch_left_animation[0].get_width() - self.person.get_width()
-                if self.look_right:
-                    self.ticks_plus()
-
-                    screen.blit(self.person_normal_weapon_punch_right_animation[self.now_frame % len(self.person_normal_weapon_punch_right_animation)], (self.position_x, self.position_y))
-                    screen.blit(self.normal_weapon_punch_right_animation[self.now_frame%len(self.normal_weapon_punch_right_animation)], (self.position_x, self.position_y))
-                else:
-                    self.ticks_plus()
-
-                    screen.blit(self.person_normal_weapon_punch_left_animation[self.now_frame % len(self.person_normal_weapon_punch_left_animation)], (self.position_x, self.position_y))
-                    screen.blit(self.normal_weapon_punch_left_animation[self.now_frame%len(self.normal_weapon_punch_left_animation)],(self.position_x,self.position_y))
-                if self.now_frame==len(self.normal_weapon_punch_left_animation):
-                    self.normal_weapon_punch=False
-                    self.now_frame=0
-                    self.counter_tics=0
-                    self.animation_active=False
-                    self.position_y += self.normal_weapon_punch_left_animation[0].get_height() - self.person.get_height()
-                    # self.tics = fps//len(self.walk_right_animation)
-                    if not self.look_right:
-                        self.position_x += self.normal_weapon_punch_left_animation[0].get_width() - self.person.get_width()
 
 class Main_menu_object(pygame.sprite.Sprite):
     def __init__(self,value,x=0,y=0):
@@ -212,46 +164,50 @@ font = pygame.font.SysFont("Times New Roman", 50)
 game_mode = 0
 while running:
     if game_mode==1:
+        all_sprites = pygame.sprite.Group()
         background = Background()
         background.load_background(0)
-        person = Person()
-        person.load_person(0)
+        level = Level(1)
         while game_mode==1:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                     game_mode=-1
-                if not person.animation_active:
+                if not level.person.animation_active:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if event.button == 1:
-                            person.normal_weapon_punch = True
-                            person.animation_active = True
+                            level.person.normal_weapon_punch = True
+                            level.person.animation_active = True
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RIGHT:
-                            person.look_right = True
-                            person.walk = True
-                            person.animation_active = True
+                            level.person.look_right = True
+                            level.person.walk = True
+                            level.person.animation_active = True
 
                         elif event.key == pygame.K_LEFT:
-                            person.look_right = False
-                            person.walk=True
-                            person.animation_active = True
+                            level.person.look_right = False
+                            level.person.walk=True
+                            level.person.animation_active = True
                 elif event.type == pygame.KEYUP:
-                    if person.walk:
-                        person.walk = False
-                        person.animation_active= False
-                        person.now_frame=0
-                        person.counter_tics = 0
+                    if level.person.walk:
+                        level.person.walk = False
+                        level.person.animation_active= False
+                        level.person.now_frame=0
+                        level.person.counter_tics = 0
+                        level.person.image=pygame.image.load("data/person.png")
             keys = pygame.key.get_pressed()
-            if person.walk:
+            if level.person.walk:
                 if keys[pygame.K_LEFT]:
                     background.position_x += background.speed
                 elif keys[pygame.K_RIGHT]:
                     background.position_x -= background.speed
-
+            if level.person.animation_active:
+                level.person.animation()
+                level.weapon.animation()
             screen.fill((0, 0, 0))
             background.bliting()
-            person.bliting()
+            all_sprites.draw(screen)
+            all_sprites.update(screen)
             pygame.display.update((0,0,screen_width,screen_height))
             clock.tick(fps)
             pygame.display.set_caption(str(clock.get_fps()))
@@ -263,6 +219,7 @@ while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                    game_mode=-1
                 if event.type==pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         x,y = pygame.mouse.get_pos()
