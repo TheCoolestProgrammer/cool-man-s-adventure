@@ -76,18 +76,19 @@ class LevelObject(pygame.sprite.Sprite):
                     if self.normal_weapon_punch:
                         self.animation_active = False
                         self.normal_weapon_punch = False
+                    #self.back(self.person,self.weapon)
 
-                    if self.person:
-                        self.image = pygame.image.load("data/person.png")
-                        if not self.look_right:
-                            self.image = pygame.transform.flip(self.image, True, False)
-                    elif self.weapon:
-                        self.image = pygame.image.load("data/sword.png")
-                        if not self.look_right:
-                            self.image = pygame.transform.flip(self.image, True, False)
 
         self.counter_tics += 1
-
+    def back(self,person,weapon):
+        if self.person:
+            self.image = pygame.image.load("data/person.png")
+            if not self.look_right:
+                self.image = pygame.transform.flip(self.image, True, False)
+        elif self.weapon:
+            self.image = pygame.image.load("data/sword.png")
+            if not self.look_right:
+                self.image = pygame.transform.flip(self.image, True, False)
 
 class Level():
     def __init__(self, level):
@@ -187,6 +188,12 @@ class Main_menu():
                     self.counter_tics = 0
                     self.animation_up = False
 
+def load_image():
+    level.person.image = pygame.image.load("data/person.png")
+    level.weapon.image = pygame.image.load("data/sword.png")
+    if not level.person.look_right:
+        level.person.image = pygame.transform.flip(level.person.image, True, False)
+        level.weapon.image = pygame.transform.flip(level.weapon.image, True, False)
 
 running = True
 pygame.init()
@@ -219,18 +226,17 @@ while running:
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_RIGHT:
                             level.person.look_right = True
+                            load_image()
                             level.weapon.look_right = True
                             level.person.walk = True
                             level.person.animation_active = True
-                            level.person.image = pygame.image.load("data/person.png")
-                            level.weapon.image = pygame.image.load("data/sword.png")
+
                         elif event.key == pygame.K_LEFT:
                             level.person.look_right = False
+                            load_image()
+
                             level.weapon.look_right = False
-                            level.person.image = pygame.image.load("data/person.png")
-                            level.weapon.image = pygame.image.load("data/sword.png")
-                            level.person.image = pygame.transform.flip(level.person.image, True, False)
-                            level.weapon.image = pygame.transform.flip(level.weapon.image, True, False)
+
                             level.person.walk = True
                             level.person.animation_active = True
                 elif event.type == pygame.KEYUP:
@@ -242,11 +248,8 @@ while running:
                         level.person.counter_tics = 0
                         level.weapon.now_frame = 0
                         level.weapon.counter_tics = 0
-                        # level.person.image=pygame.image.load("data/person.png")
-                        # level.weapon.image = pygame.image.load("data/sword.png")
-                        # if not level.person.look_right:
-                        #     level.person.image = pygame.transform.flip(level.person.image, True, False)
-                        #     level.weapon.image = pygame.transform.flip(level.weapon.image, True, False)
+                        load_image()
+
             keys = pygame.key.get_pressed()
 
             if level.person.animation_active:
