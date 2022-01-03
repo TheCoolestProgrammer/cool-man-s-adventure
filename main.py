@@ -46,6 +46,7 @@ class LevelObject(pygame.sprite.Sprite):
         self.counter_tics = 0
         self.tics = fps // 5 // 2
         self.max_value_anim = 5
+        self.super_punch = False
         all_sprites.add(self)
 
     def animation(self):
@@ -56,20 +57,27 @@ class LevelObject(pygame.sprite.Sprite):
                 if self.person:
                     if self.walk:
                         self.max_value_anim = 5
-                        self.image = pygame.image.load(f"data/person_walk_anim{self.now_frame % 5 + 1}.png")
+                        self.image = pygame.image.load(f"data/person_walk_anim{self.now_frame % self.max_value_anim + 1}.png")
                     elif self.normal_weapon_punch:
+                        self.max_value_anim = 6
+                        self.image = pygame.image.load(f"data/person.png")
+                    elif self.super_punch:
                         self.max_value_anim = 9
-                        self.image = pygame.image.load(f"data/person_sword_punch{self.now_frame % 9 + 1}.png")
+                        self.image = pygame.image.load(f"data/sword_punch{self.now_frame % self.max_value_anim + 1}.png")
                     if not self.look_right:
                         self.image = pygame.transform.flip(self.image, True, False)
                 elif self.weapon:
-                    # if self.weapon
+
                     if self.walk:
                         self.max_value_anim = 5
-                        self.image = pygame.image.load(f"data/fists_walk_animation{self.now_frame % 5 + 1}.png")
+                        self.image = pygame.image.load(f"data/fists_walk_animation{self.now_frame % self.max_value_anim + 1}.png")
                     elif self.normal_weapon_punch:
+                        self.max_value_anim = 6
+                        self.image = pygame.image.load(f"data/fists_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    elif self.super_punch:
                         self.max_value_anim = 9
-                        self.image = pygame.image.load(f"data/sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                        self.image = pygame.image.load(f"data/person_sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+
                     if not self.look_right:
                         self.image = pygame.transform.flip(self.image, True, False)
 
@@ -78,6 +86,9 @@ class LevelObject(pygame.sprite.Sprite):
                     self.counter_tics = 0
                     if self.normal_weapon_punch:
                         self.normal_weapon_punch = False
+                        self.animation_active = False
+                    elif self.super_punch:
+                        self.super_punch = False
                         self.animation_active = False
                     #self.back(self.person,self.weapon)
 
@@ -227,6 +238,12 @@ while running:
                             level.person.animation_active = True
                             level.weapon.animation_active = True
                     if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_e:
+                            level.person.super_punch=True
+                            level.weapon.super_punch=True
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+
                         if event.key == pygame.K_RIGHT:
                             level.person.look_right = True
                             load_image()
