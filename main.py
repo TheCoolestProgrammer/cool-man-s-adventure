@@ -24,8 +24,6 @@ class LevelObject(pygame.sprite.Sprite):
                 self.image = pygame.image.load("data/person.png").convert_alpha()
             self.rect = self.image.get_rect()
             self.person = True
-
-
             self.speed = background.speed
             self.person_number = person
         elif weapon:
@@ -47,6 +45,8 @@ class LevelObject(pygame.sprite.Sprite):
         self.tics = fps // 5 // 2
         self.max_value_anim = 5
         self.super_punch = False
+        self.jump = False
+        self.v_0 = 15
         all_sprites.add(self)
 
     def animation(self):
@@ -64,6 +64,10 @@ class LevelObject(pygame.sprite.Sprite):
                     elif self.super_punch:
                         self.max_value_anim = 9
                         self.image = pygame.image.load(f"data/sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    elif self.jump:
+                        self.max_value_anim=10
+                        self.image = pygame.image.load(f"data/jump_person{self.now_frame % self.max_value_anim + 1}.png")
+                        self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
                     if not self.look_right:
                         self.image = pygame.transform.flip(self.image, True, False)
                 elif self.weapon:
@@ -77,6 +81,10 @@ class LevelObject(pygame.sprite.Sprite):
                     elif self.super_punch:
                         self.max_value_anim = 9
                         self.image = pygame.image.load(f"data/person_sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    elif self.jump:
+                        self.max_value_anim = 10
+                        self.image = pygame.image.load(f"data/jump_hands{self.now_frame % self.max_value_anim + 1}.png")
+                        self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
 
                     if not self.look_right:
                         self.image = pygame.transform.flip(self.image, True, False)
@@ -90,6 +98,10 @@ class LevelObject(pygame.sprite.Sprite):
                     elif self.super_punch:
                         self.super_punch = False
                         self.animation_active = False
+                    elif self.jump:
+                        self.jump=False
+                        self.animation_active=False
+                        self.rect.y = screen_height - 500
                     #self.back(self.person,self.weapon)
 
 
@@ -237,7 +249,13 @@ while running:
                             level.weapon.normal_weapon_punch = True
                             level.person.animation_active = True
                             level.weapon.animation_active = True
+
                     if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+                            level.person.jump = True
+                            level.weapon.jump = True
                         if event.key == pygame.K_e:
                             level.person.super_punch=True
                             level.weapon.super_punch=True
@@ -277,7 +295,7 @@ while running:
             keys = pygame.key.get_pressed()
 
             if level.person.animation_active:
-                if level.person.walk:
+                if level.person.walk or level.person.jump:
                     if keys[pygame.K_LEFT]:
                         background.position_x += background.speed
                     elif keys[pygame.K_RIGHT]:
