@@ -282,18 +282,22 @@ while running:
                             if not menu.animation_active:
                                 if pygame.sprite.collide_mask(menu.button_up, mouse):
                                     print("moving up")
-                                    menu.active_button += 1
+                                    menu.active_button -= 1
                                     menu.active_button %= 4
                                     menu.animation_active = True
                                     menu.animation_up = True
                                 elif pygame.sprite.collide_mask(menu.button_down, mouse):
                                     print("moving down")
-                                    menu.active_button -= 1
+                                    menu.active_button += 1
                                     menu.active_button %= 4
                                     menu.animation_active = True
                                     menu.animation_up = False
                                 elif pygame.sprite.collide_mask(menu.button, mouse):
-                                    game_mode = 1
+                                    if menu.active_button==0:
+                                        game_mode = 1
+                                    elif menu.active_button==3:
+                                        game_mode = -1
+                                        running = False
 
             if menu.animation_active:
                 menu.animation()
