@@ -102,7 +102,7 @@ class LevelObject(pygame.sprite.Sprite):
                         self.jump=False
                         self.animation_active=False
                         self.rect.y = screen_height - 500
-                    #self.back(self.person,self.weapon)
+                    self.back(self.person,self.weapon)
 
 
         self.counter_tics += 1
@@ -112,9 +112,38 @@ class LevelObject(pygame.sprite.Sprite):
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
         elif self.weapon:
-            self.image = pygame.image.load("data/sword.png")
+            self.image = pygame.image.load("data/fists.png")
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
+class Effect(pygame.sprite.Sprite):
+    def __init__(self,effect,x,y):
+        super().__init__(effects)
+        self.animation_active=False
+        if effect == 1:
+            self.image = pygame.image.load(f"data/sword_effects1.png")
+            self.rect = self.image.get_rect()
+            self.rect.x = x
+            self.rect.y = y
+            self.now_frame = 0
+            self.counter_tics = 0
+            self.tics = fps // 5 // 2
+            self.max_value_anim = 9
+        self.look_right = True
+        effects.add(self)
+
+    def animation(self):
+        print(self.now_frame,self.max_value_anim)
+        if self.counter_tics >= self.tics:
+            self.counter_tics = 0
+            self.now_frame += 1
+            self.image = pygame.image.load(f"data/sword_effects{self.now_frame % self.max_value_anim + 1}.png")
+            if not level.person.look_right:
+                self.image = pygame.transform.flip(self.image, True, False)
+        if self.now_frame==self.max_value_anim:
+            self.animation_active = False
+            self.now_frame=0
+            self.counter_tics=0
+        self.counter_tics+=1
 
 class Level():
     def __init__(self, level):
@@ -123,7 +152,7 @@ class Level():
             y = screen_height - 500
             self.person = LevelObject(1, False, x, y)
             self.weapon = LevelObject(False, 1, x, y)
-
+            self.sword_effect = Effect(1,x,y)
 
 class MainMenuObject(pygame.sprite.Sprite):
     def __init__(self, value, x=0, y=0):
@@ -234,6 +263,7 @@ game_mode = 0
 while running:
     if game_mode == 1:
         all_sprites = pygame.sprite.Group()
+        effects = pygame.sprite.Group()
         background = Background()
         background.load_background(0)
         level = Level(1)
@@ -261,6 +291,7 @@ while running:
                             level.weapon.super_punch=True
                             level.person.animation_active = True
                             level.weapon.animation_active = True
+                            level.sword_effect.animation_active=True
 
                         if event.key == pygame.K_RIGHT:
                             level.person.look_right = True
@@ -305,8 +336,13 @@ while running:
                 level.weapon.animation()
             screen.fill((0, 0, 0))
             background.bliting()
+            if level.sword_effect.animation_active:
+                level.sword_effect.animation()
+                effects.draw(screen)
+                effects.update(screen)
             all_sprites.draw(screen)
             all_sprites.update(screen)
+
             pygame.display.update((0, 0, screen_width, screen_height))
             clock.tick(fps)
             pygame.display.set_caption(str(clock.get_fps()))
