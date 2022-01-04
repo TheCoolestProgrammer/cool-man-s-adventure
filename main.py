@@ -8,7 +8,7 @@ class Background():
         self.background = pygame.Surface.convert_alpha(self.background)
         self.position_x = 0
         self.position_y = 0
-        self.speed = 8
+        self.speed = 15
 
     def bliting(self):
         screen.blit(self.background, (self.position_x, self.position_y))
@@ -21,7 +21,7 @@ class LevelObject(pygame.sprite.Sprite):
         self.weapon = False
         if person:
             if person == 1:
-                self.image = pygame.image.load("data/person.png").convert_alpha()
+                self.image = pygame.image.load("data/person1.png").convert_alpha()
             self.rect = self.image.get_rect()
             self.person = True
             self.speed = background.speed
@@ -62,7 +62,7 @@ class LevelObject(pygame.sprite.Sprite):
                         self.image = pygame.image.load(f"data/person_walk_anim{self.now_frame % self.max_value_anim + 1}.png")
                     elif self.normal_weapon_punch:
                         self.max_value_anim = 6
-                        self.image = pygame.image.load(f"data/person.png")
+                        self.image = pygame.image.load(f"data/person1.png")
                     elif self.super_punch:
                         self.max_value_anim = 9
                         self.image = pygame.image.load(f"data/sword_punch{self.now_frame % self.max_value_anim + 1}.png")
@@ -72,7 +72,7 @@ class LevelObject(pygame.sprite.Sprite):
                         self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
                     elif self.block:
                         self.max_value_anim+=1
-                        self.image = pygame.image.load(f"data/person.png")
+                        self.image = pygame.image.load(f"data/person1.png")
                     elif self.sitting:
                         self.max_value_anim += 1
                         self.image = pygame.image.load(f"data/sitting.png")
@@ -119,7 +119,7 @@ class LevelObject(pygame.sprite.Sprite):
         self.counter_tics += 1
     def back(self,person,weapon):
         if self.person:
-            self.image = pygame.image.load("data/person.png")
+            self.image = pygame.image.load("data/person1.png")
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
         elif self.weapon:
@@ -207,6 +207,16 @@ class MainMenuObject(pygame.sprite.Sprite):
                 elif value == 2:
                     self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
                     self.rect.y = screen_height//2+(screen_height//2 -menu.button.rect.y) + 20 + self.image.get_height()
+            elif menu.slide == 2:
+
+                if value == 1:
+                    self.image = pygame.transform.rotate(self.image,90)
+                elif value == 2:
+                    self.image = pygame.transform.rotate(self.image,90)
+                self.rect = self.image.get_rect()
+                self.rect.x = x
+                self.rect.y = y
+
             self.mask = pygame.mask.from_surface(self.image)
             all_sprites.add(self)
 
@@ -236,6 +246,19 @@ class Main_menu():
             self.now_frame = 1
             self.counter_tics = 0
             self.tics = fps / 12
+        elif self.slide == 2:
+            self.background = pygame.image.load("data/menu_background2.png")
+            self.background = pygame.Surface.convert_alpha(self.background)
+            self.button_left_1 = MainMenuObject(1,20,screen_height-150)
+            self.button_right_1 = MainMenuObject(2,80, screen_height-150)
+            self.button_left_2 = MainMenuObject(1,screen_width-130,screen_height-150)
+            self.button_right_2 = MainMenuObject(2,screen_width-70,screen_height-150)
+            self.button = MainMenuObject(0,screen_width//2-320,screen_height-100)
+            self.active_button = 0
+            self.animation_active = False
+            self.now_frame = 1
+            self.counter_tics = 0
+            self.tics = fps / 12
     def bliting(self):
 
         screen.blit(self.background, (0, 0))
@@ -251,7 +274,7 @@ class Main_menu():
             elif self.active_button == 3:
                 text = font.render("EXIT", True, (0, 255, 0))
             screen.blit(text, (screen_width // 8 * 3, 520))
-        else:
+        elif self.slide == 1:
             if self.active_button == 0:
                 text = font.render("LOCAL", True, (0, 255, 0))
             elif self.active_button == 1:
@@ -259,6 +282,21 @@ class Main_menu():
             elif self.active_button == 2:
                 text = font.render("EXIT", True, (0, 255, 0))
             screen.blit(text, (menu.button.rect.x+menu.button.rect.x//8*6,menu.button.rect.y))
+        else:
+            image = pygame.image.load(f"data/person{hero%heroes_list_len+1}.png")
+            screen.blit(image,(0,0))
+            if hero%heroes_list_len+1 == 1:
+                image=  pygame.image.load(f"data/fists.png")
+            screen.blit(image,(0,0))
+
+            image = pygame.image.load(f"data/person{hero2 % heroes_list_len + 1}.png")
+            image = pygame.transform.flip(image, True, False)
+            screen.blit(image, (screen_width-400, 0))
+            if hero2 % heroes_list_len + 1 == 1:
+                image = pygame.image.load(f"data/fists.png")
+                image = pygame.transform.flip(image,True,False)
+
+            screen.blit(image, (screen_width-400, 0))
         self.animation_up = False
 
     def animation(self):
@@ -294,10 +332,12 @@ screen = pygame.display.set_mode((screen_width, screen_height))
 fps = 30
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Times New Roman", 50)
-
+heroes_list_len = 2
+hero = 0
+hero2 = 0
 game_mode = 0
 while running:
-    if game_mode == 2:
+    if game_mode == 3:
         all_sprites = pygame.sprite.Group()
         effects = pygame.sprite.Group()
         background = Background()
@@ -405,15 +445,17 @@ while running:
             pygame.display.update((0, 0, screen_width, screen_height))
             clock.tick(fps)
             pygame.display.set_caption(str(clock.get_fps()))
-    elif game_mode== 0 or game_mode==1:
+    elif game_mode== 0 or game_mode==1 or game_mode==2:
         all_sprites = pygame.sprite.Group()
         menu = Main_menu()
         menu.load_image(game_mode)
         menu_running = True
         if game_mode == 0:
             buttons_count = 4
-        else:
+        elif game_mode == 1:
             buttons_count=3
+        else:
+            buttons_count=1
         while menu_running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -424,39 +466,48 @@ while running:
                     if event.button == 1:
                         x, y = pygame.mouse.get_pos()
                         mouse = MainMenuObject(-1, x, y)
-
-                        if not menu.animation_active:
-                            if pygame.sprite.collide_mask(menu.button_up, mouse):
-                                print("moving up")
-                                menu.active_button -= 1
-                                menu.active_button %= buttons_count
-                                menu.animation_active = True
-                                menu.animation_up = True
-                            elif pygame.sprite.collide_mask(menu.button_down, mouse):
-                                print("moving down")
-                                menu.active_button += 1
-                                menu.active_button %= buttons_count
-                                menu.animation_active = True
-                                menu.animation_up = False
+                        if game_mode<2:
+                            if not menu.animation_active:
+                                if pygame.sprite.collide_mask(menu.button_up, mouse):
+                                    print("moving up")
+                                    menu.active_button -= 1
+                                    menu.active_button %= buttons_count
+                                    menu.animation_active = True
+                                    menu.animation_up = True
+                                elif pygame.sprite.collide_mask(menu.button_down, mouse):
+                                    print("moving down")
+                                    menu.active_button += 1
+                                    menu.active_button %= buttons_count
+                                    menu.animation_active = True
+                                    menu.animation_up = False
+                                elif pygame.sprite.collide_mask(menu.button, mouse):
+                                    if game_mode==0:
+                                        if menu.active_button==0:
+                                            game_mode = 1
+                                            menu_running= False
+                                        elif menu.active_button==3:
+                                            game_mode = -1
+                                            menu_running= False
+                                            running = False
+                                    else:
+                                        if menu.active_button == 0:
+                                            game_mode=2
+                                            menu_running=False
+                                        if menu.active_button == 2:
+                                            game_mode = 0
+                                            menu_running = False
+                        else:
+                            if pygame.sprite.collide_mask(menu.button_left_1, mouse):
+                                hero-=1
+                            elif pygame.sprite.collide_mask(menu.button_right_1, mouse):
+                                hero+=1
+                            if pygame.sprite.collide_mask(menu.button_left_2, mouse):
+                                hero2-=1
+                            elif pygame.sprite.collide_mask(menu.button_right_2, mouse):
+                                hero2+=1
                             elif pygame.sprite.collide_mask(menu.button, mouse):
-                                if game_mode==0:
-                                    if menu.active_button==0:
-                                        game_mode = 1
-                                        menu_running= False
-                                    elif menu.active_button==3:
-                                        game_mode = -1
-                                        menu_running= False
-                                        running = False
-                                else:
-
-                                    if menu.active_button == 0:
-                                        game_mode=2
-                                        menu_running=False
-                                    if menu.active_button == 2:
-                                        game_mode = 0
-                                        menu_running = False
-
-
+                                menu_running=False
+                                game_mode=3
             if menu.animation_active:
                 menu.animation()
             menu.bliting()
