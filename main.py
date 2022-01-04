@@ -187,15 +187,26 @@ class MainMenuObject(pygame.sprite.Sprite):
             self.rect.y = y
             self.mask = pygame.mask.from_surface(self.image)
         else:
-            if value == 0:
-                self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
-                self.rect.y = 500
-            elif value == 1:
-                self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
-                self.rect.y = 400
-            elif value == 2:
-                self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
-                self.rect.y = 650
+            if menu.slide == 0:
+                if value == 0:
+                    self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
+                    self.rect.y = 500
+                elif value == 1:
+                    self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
+                    self.rect.y = 400
+                elif value == 2:
+                    self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
+                    self.rect.y = 650
+            elif menu.slide == 1:
+                if value == 0:
+                    self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
+                    self.rect.y = screen_height // 2 - (self.image.get_height() // 2)
+                elif value == 1:
+                    self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
+                    self.rect.y = menu.button.rect.y - 20 - self.image.get_height()
+                elif value == 2:
+                    self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
+                    self.rect.y = screen_height+(screen_height -menu.button.rect.y) + 20 + self.image.get_height()
 
             self.mask = pygame.mask.from_surface(self.image)
             all_sprites.add(self)
@@ -208,7 +219,6 @@ class Main_menu():
             self.background = pygame.image.load("data/menu_background.png")
             self.background = pygame.Surface.convert_alpha(self.background)
             self.button = MainMenuObject(0)
-
             self.button_up = MainMenuObject(1)
             self.button_down = MainMenuObject(2)
             self.active_button = 0
@@ -216,20 +226,38 @@ class Main_menu():
             self.now_frame = 1
             self.counter_tics = 0
             self.tics = fps / 12
-
+        elif self.slide == 1:
+            self.background = pygame.image.load("data/menu_background2.png")
+            self.background = pygame.Surface.convert_alpha(self.background)
+            self.button = MainMenuObject(0)
+            self.button_up = MainMenuObject(1)
+            self.button_down = MainMenuObject(2)
+            self.active_button = 0
+            self.animation_active = False
+            self.now_frame = 1
+            self.counter_tics = 0
+            self.tics = fps / 12
     def bliting(self):
         if self.slide == 0:
             screen.blit(self.background, (0, 0))
             all_sprites.draw(screen)
             all_sprites.update(screen)
-            if self.active_button == 0:
-                text = font.render("MULTIPLAYER", True, (0, 255, 0))
-            elif self.active_button == 1:
-                text = font.render("SINGLEPLAYER", True, (0, 255, 0))
-            elif self.active_button == 2:
-                text = font.render("OPTIONS", True, (0, 255, 0))
-            elif self.active_button == 3:
-                text = font.render("EXIT", True, (0, 255, 0))
+            if self.slide == 0:
+                if self.active_button == 0:
+                    text = font.render("MULTIPLAYER", True, (0, 255, 0))
+                elif self.active_button == 1:
+                    text = font.render("SINGLEPLAYER", True, (0, 255, 0))
+                elif self.active_button == 2:
+                    text = font.render("OPTIONS", True, (0, 255, 0))
+                elif self.active_button == 3:
+                    text = font.render("EXIT", True, (0, 255, 0))
+            else:
+                if self.active_button == 0:
+                    text = font.render("LOCAL", True, (0, 255, 0))
+                elif self.active_button == 1:
+                    text = font.render("ENTERNET", True, (0, 255, 0))
+                elif self.active_button == 2:
+                    text = font.render("EXIT", True, (0, 255, 0))
             screen.blit(text, (screen_width // 8 * 3, 520))
             self.animation_up = False
 
@@ -256,13 +284,8 @@ class Main_menu():
                     self.animation_active = False
                     self.counter_tics = 0
                     self.animation_up = False
-
-# def load_image():
-#     level.person.image = pygame.image.load("data/person.png")
-#     level.weapon.image = pygame.image.load("data/fists.png")
-#     if not level.person.look_right:
-#         level.person.image = pygame.transform.flip(level.person.image, True, False)
-#         level.weapon.image = pygame.transform.flip(level.weapon.image, True, False)
+        elif self.slide == 1:
+            pass
 
 running = True
 pygame.init()
