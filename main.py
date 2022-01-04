@@ -448,6 +448,10 @@ while running:
                                         menu_running= False
                                         running = False
                                 else:
+
+                                    if menu.active_button == 0:
+                                        game_mode=2
+                                        menu_running=False
                                     if menu.active_button == 2:
                                         game_mode = 0
                                         menu_running = False
