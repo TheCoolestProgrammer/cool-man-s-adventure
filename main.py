@@ -8,7 +8,7 @@ class Background():
         self.background = pygame.Surface.convert_alpha(self.background)
         self.position_x = 0
         self.position_y = 0
-        self.speed = 3
+        self.speed = 8
 
     def bliting(self):
         screen.blit(self.background, (self.position_x, self.position_y))
@@ -47,6 +47,8 @@ class LevelObject(pygame.sprite.Sprite):
         self.super_punch = False
         self.jump = False
         self.v_0 = 15
+        self.block= False
+        self.sitting = False
         all_sprites.add(self)
 
     def animation(self):
@@ -68,6 +70,12 @@ class LevelObject(pygame.sprite.Sprite):
                         self.max_value_anim=10
                         self.image = pygame.image.load(f"data/jump_person{self.now_frame % self.max_value_anim + 1}.png")
                         self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
+                    elif self.block:
+                        self.max_value_anim+=1
+                        self.image = pygame.image.load(f"data/person.png")
+                    elif self.sitting:
+                        self.max_value_anim += 1
+                        self.image = pygame.image.load(f"data/sitting.png")
                     if not self.look_right:
                         self.image = pygame.transform.flip(self.image, True, False)
                 elif self.weapon:
@@ -85,13 +93,16 @@ class LevelObject(pygame.sprite.Sprite):
                         self.max_value_anim = 10
                         self.image = pygame.image.load(f"data/jump_hands{self.now_frame % self.max_value_anim + 1}.png")
                         self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
-
+                    elif self.block:
+                        self.max_value_anim+=1
+                        self.image = pygame.image.load(f"data/block.png")
+                    elif self.sitting:
+                        self.max_value_anim += 1
+                        self.image = pygame.image.load(f"data/sitting.png")
                     if not self.look_right:
                         self.image = pygame.transform.flip(self.image, True, False)
 
                 if self.max_value_anim == self.now_frame:
-                    self.now_frame = 0
-                    self.counter_tics = 0
                     if self.normal_weapon_punch:
                         self.normal_weapon_punch = False
                         self.animation_active = False
@@ -115,6 +126,9 @@ class LevelObject(pygame.sprite.Sprite):
             self.image = pygame.image.load("data/fists.png")
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
+        self.now_frame=0
+        self.counter_tics=0
+        self.max_value_anim=5
 class Effect(pygame.sprite.Sprite):
     def __init__(self,effect,x,y):
         super().__init__(effects)
@@ -243,19 +257,19 @@ class Main_menu():
                     self.counter_tics = 0
                     self.animation_up = False
 
-def load_image():
-    level.person.image = pygame.image.load("data/person.png")
-    level.weapon.image = pygame.image.load("data/fists.png")
-    if not level.person.look_right:
-        level.person.image = pygame.transform.flip(level.person.image, True, False)
-        level.weapon.image = pygame.transform.flip(level.weapon.image, True, False)
+# def load_image():
+#     level.person.image = pygame.image.load("data/person.png")
+#     level.weapon.image = pygame.image.load("data/fists.png")
+#     if not level.person.look_right:
+#         level.person.image = pygame.transform.flip(level.person.image, True, False)
+#         level.weapon.image = pygame.transform.flip(level.weapon.image, True, False)
 
 running = True
 pygame.init()
 pygame.display.set_caption('the cool man adventure')
 screen_width, screen_height = 1280, 720
 screen = pygame.display.set_mode((screen_width, screen_height))
-fps = 120
+fps = 30
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("Times New Roman", 50)
 
@@ -279,8 +293,18 @@ while running:
                             level.weapon.normal_weapon_punch = True
                             level.person.animation_active = True
                             level.weapon.animation_active = True
+                        if event.button == 3:
+                            level.person.block = True
+                            level.weapon.block = True
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
 
                     if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_DOWN:
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+                            level.person.sitting = True
+                            level.weapon.sitting = True
                         if event.key == pygame.K_SPACE:
                             level.person.animation_active = True
                             level.weapon.animation_active = True
@@ -292,21 +316,21 @@ while running:
                             level.person.animation_active = True
                             level.weapon.animation_active = True
                             level.sword_effect.animation_active=True
-
                         if event.key == pygame.K_RIGHT:
                             level.person.look_right = True
-                            load_image()
                             level.weapon.look_right = True
+                            level.person.back(level.person.person, False)
+                            level.weapon.back(False, level.weapon.weapon)
+
                             level.person.walk = True
                             level.weapon.walk = True
                             level.person.animation_active = True
                             level.weapon.animation_active = True
                         elif event.key == pygame.K_LEFT:
                             level.person.look_right = False
-                            load_image()
-
                             level.weapon.look_right = False
-
+                            level.person.back(level.person.person, False)
+                            level.weapon.back(False, level.weapon.weapon)
                             level.person.walk = True
                             level.weapon.walk = True
                             level.person.animation_active = True
@@ -317,12 +341,23 @@ while running:
                         level.weapon.walk = False
                         level.person.animation_active = False
                         level.weapon.animation_active = False
-                        level.person.now_frame = 0
-                        level.person.counter_tics = 0
-                        level.weapon.now_frame = 0
-                        level.weapon.counter_tics = 0
-                        load_image()
-
+                        level.person.back(level.person.person, False)
+                        level.weapon.back(False, level.weapon.weapon)
+                    if level.person.sitting:
+                        level.person.sitting = False
+                        level.weapon.sitting= False
+                        level.person.animation_active = False
+                        level.weapon.animation_active = False
+                        level.person.back(level.person.person, False)
+                        level.weapon.back(False, level.weapon.weapon)
+                elif event.type == pygame.MOUSEBUTTONUP :
+                    if event.button == 3 and level.person.block:
+                        level.person.block = False
+                        level.weapon.block = False
+                        level.person.animation_active = False
+                        level.weapon.animation_active = False
+                        level.person.back(level.person.person,False)
+                        level.weapon.back(False,level.weapon.weapon)
             keys = pygame.key.get_pressed()
 
             if level.person.animation_active:
