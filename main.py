@@ -283,6 +283,9 @@ class Main_menu():
                 text = font.render("EXIT", True, (0, 255, 0))
             screen.blit(text, (menu.button.rect.x+menu.button.rect.x//8*6,menu.button.rect.y))
         else:
+            image = pygame.image.load(f"data/shadow.png")
+            screen.blit(image, (0, 0))
+            screen.blit(image, (screen_width - 400, 0))
             image = pygame.image.load(f"data/person{hero%heroes_list_len+1}.png")
             screen.blit(image,(0,0))
             if hero%heroes_list_len+1 == 1:
@@ -295,8 +298,9 @@ class Main_menu():
             if hero2 % heroes_list_len + 1 == 1:
                 image = pygame.image.load(f"data/fists.png")
                 image = pygame.transform.flip(image,True,False)
-
             screen.blit(image, (screen_width-400, 0))
+            text = font.render("ACCEPT", True, (0, 255, 0))
+            screen.blit(text, (menu.button.rect.x + menu.button.rect.x // 2, menu.button.rect.y))
         self.animation_up = False
 
     def animation(self):
