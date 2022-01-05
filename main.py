@@ -158,7 +158,21 @@ class Effect(pygame.sprite.Sprite):
             self.now_frame=0
             self.counter_tics=0
         self.counter_tics+=1
-
+class Lives():
+    def __init__(self,x=0, y=0):
+        self.image = pygame.image.load(f"data/health_bar.png")
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.lives = 100
+    def blitting(self,player):
+        screen.blit(self.image, (self.rect.x, self.rect.y))
+        if player == 1:
+            pygame.draw.rect(screen,(255,0,0),(8,8,int(624/100*self.lives),34))
+        elif player == 2:
+            pass
+            #pygame.draw.rect(screen, (255, 0, 0), (632, 8, 624//100*self.lives, 34))
+            pygame.draw.rect(screen, (255, 0, 0), (int(624/100*self.lives)+16, 8, int(624/100*self.lives), 34))
 class Level():
     def __init__(self, level):
         if level == 1:
@@ -167,7 +181,11 @@ class Level():
             self.person = LevelObject(1, False, x, y)
             self.weapon = LevelObject(False, 1, x, y)
             self.sword_effect = Effect(1,x,y)
-
+            self.health_bar_player1 = Lives(0,0)
+            self.person2 = LevelObject(1, False, x, y)
+            self.weapon2= LevelObject(False, 1, x, y)
+            self.health_bar_player1 = Lives(0, 0)
+            self.health_bar_player2 = Lives(screen_width//2,0)
 class MainMenuObject(pygame.sprite.Sprite):
     def __init__(self, value, x=0, y=0):
         super().__init__(all_sprites)
@@ -300,7 +318,7 @@ class Main_menu():
                 image = pygame.transform.flip(image,True,False)
             screen.blit(image, (screen_width-400, 0))
             text = font.render("ACCEPT", True, (0, 255, 0))
-            screen.blit(text, (menu.button.rect.x + menu.button.rect.x // 2, menu.button.rect.y))
+            screen.blit(text, (menu.button.rect.x+menu.button.rect.x//2, menu.button.rect.y))
         self.animation_up = False
 
     def animation(self):
@@ -445,7 +463,8 @@ while running:
                 effects.update(screen)
             all_sprites.draw(screen)
             all_sprites.update(screen)
-
+            level.health_bar_player1.blitting(1)
+            level.health_bar_player2.blitting(2)
             pygame.display.update((0, 0, screen_width, screen_height))
             clock.tick(fps)
             pygame.display.set_caption(str(clock.get_fps()))
