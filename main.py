@@ -114,7 +114,7 @@ class LevelObject(pygame.sprite.Sprite):
                         self.animation_active=False
                         self.rect.y = screen_height - 500
                     self.back(self.person,self.weapon)
-
+                self.mask = pygame.mask.from_surface(self.image)
 
         self.counter_tics += 1
     def back(self,person,weapon):
@@ -171,7 +171,6 @@ class Lives():
             pygame.draw.rect(screen,(255,0,0),(8,8,int(624/100*self.lives),34))
         elif player == 2:
             pass
-            #pygame.draw.rect(screen, (255, 0, 0), (632, 8, 624//100*self.lives, 34))
             pygame.draw.rect(screen, (255, 0, 0), (int(624/100*self.lives)+16, 8, int(624/100*self.lives), 34))
 class Level():
     def __init__(self, level):
@@ -455,6 +454,10 @@ while running:
 
                 level.person.animation()
                 level.weapon.animation()
+            if pygame.sprite.collide_mask(level.person, level.weapon2):
+                level.health_bar_player1.lives-=1
+            if pygame.sprite.collide_mask(level.person2, level.weapon):
+                level.health_bar_player2.lives -= 1
             screen.fill((0, 0, 0))
             background.bliting()
             if level.sword_effect.animation_active:
