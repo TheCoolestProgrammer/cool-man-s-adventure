@@ -344,7 +344,26 @@ class Main_menu():
                     self.counter_tics = 0
                     self.animation_up = False
 
+class Game_over(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__(game_overs)
+        self.tics = fps // 5
+        self.max_value_anim = 12
+        self.now_frame=1
+        self.counter_ticks = 0
+        self.image = pygame.image.load(f"data/game_over{self.now_frame}.png")
 
+        self.rect = self.image.get_rect()
+        self.rect.x = 0
+        self.rect.y = 0
+        game_overs.add(self)
+    def animation(self):
+        if self.now_frame<self.max_value_anim:
+            if self.counter_ticks ==self.tics:
+                self.counter_ticks=0
+                self.now_frame+=1
+                self.image = pygame.image.load(f"data/game_over{self.now_frame}.png")
+            self.counter_ticks+=1
 running = True
 pygame.init()
 pygame.display.set_caption('the cool man adventure')
@@ -357,117 +376,136 @@ heroes_list_len = 2
 hero = 0
 hero2 = 0
 game_mode = 0
+
 while running:
     if game_mode == 3:
         all_sprites = pygame.sprite.Group()
         effects = pygame.sprite.Group()
+        game_overs = pygame.sprite.Group()
+        game_over = Game_over()
         background = Background()
         background.load_background(0)
         level = Level(1)
         game_runnung = True
+        winner = False
         while game_runnung:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                    game_mode = -1
-                    game_runnung=False
-                if not level.person.animation_active or not level.weapon.animation_active:
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if event.button == 1:
-                            level.person.normal_weapon_punch = True
-                            level.weapon.normal_weapon_punch = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                        if event.button == 3:
-                            level.person.block = True
-                            level.weapon.block = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
+            if not winner:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                        game_mode = -1
+                        game_runnung=False
 
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_DOWN:
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                            level.person.sitting = True
-                            level.weapon.sitting = True
-                        if event.key == pygame.K_SPACE:
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                            level.person.jump = True
-                            level.weapon.jump = True
-                        if event.key == pygame.K_e:
-                            level.person.super_punch=True
-                            level.weapon.super_punch=True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                            level.sword_effect.animation_active=True
-                        if event.key == pygame.K_RIGHT:
-                            level.person.look_right = True
-                            level.weapon.look_right = True
+                    if not level.person.animation_active or not level.weapon.animation_active:
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            if event.button == 1:
+                                level.person.normal_weapon_punch = True
+                                level.weapon.normal_weapon_punch = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                            if event.button == 3:
+                                level.person.block = True
+                                level.weapon.block = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_DOWN:
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                                level.person.sitting = True
+                                level.weapon.sitting = True
+                            if event.key == pygame.K_SPACE:
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                                level.person.jump = True
+                                level.weapon.jump = True
+                            if event.key == pygame.K_e:
+                                level.person.super_punch=True
+                                level.weapon.super_punch=True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                                level.sword_effect.animation_active=True
+                            if event.key == pygame.K_RIGHT:
+                                level.person.look_right = True
+                                level.weapon.look_right = True
+                                level.person.back(level.person.person, False)
+                                level.weapon.back(False, level.weapon.weapon)
+
+                                level.person.walk = True
+                                level.weapon.walk = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                            elif event.key == pygame.K_LEFT:
+                                level.person.look_right = False
+                                level.weapon.look_right = False
+                                level.person.back(level.person.person, False)
+                                level.weapon.back(False, level.weapon.weapon)
+                                level.person.walk = True
+                                level.weapon.walk = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                    elif event.type == pygame.KEYUP:
+                        if level.person.walk:
+                            level.person.walk = False
+                            level.weapon.walk = False
+                            level.person.animation_active = False
+                            level.weapon.animation_active = False
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
-
-                            level.person.walk = True
-                            level.weapon.walk = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                        elif event.key == pygame.K_LEFT:
-                            level.person.look_right = False
-                            level.weapon.look_right = False
+                        if level.person.sitting:
+                            level.person.sitting = False
+                            level.weapon.sitting= False
+                            level.person.animation_active = False
+                            level.weapon.animation_active = False
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
-                            level.person.walk = True
-                            level.weapon.walk = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                elif event.type == pygame.KEYUP:
-                    if level.person.walk:
-                        level.person.walk = False
-                        level.weapon.walk = False
-                        level.person.animation_active = False
-                        level.weapon.animation_active = False
-                        level.person.back(level.person.person, False)
-                        level.weapon.back(False, level.weapon.weapon)
-                    if level.person.sitting:
-                        level.person.sitting = False
-                        level.weapon.sitting= False
-                        level.person.animation_active = False
-                        level.weapon.animation_active = False
-                        level.person.back(level.person.person, False)
-                        level.weapon.back(False, level.weapon.weapon)
-                elif event.type == pygame.MOUSEBUTTONUP :
-                    if event.button == 3 and level.person.block:
-                        level.person.block = False
-                        level.weapon.block = False
-                        level.person.animation_active = False
-                        level.weapon.animation_active = False
-                        level.person.back(level.person.person,False)
-                        level.weapon.back(False,level.weapon.weapon)
-            keys = pygame.key.get_pressed()
+                    elif event.type == pygame.MOUSEBUTTONUP :
+                        if event.button == 3 and level.person.block:
+                            level.person.block = False
+                            level.weapon.block = False
+                            level.person.animation_active = False
+                            level.weapon.animation_active = False
+                            level.person.back(level.person.person,False)
+                            level.weapon.back(False,level.weapon.weapon)
+                keys = pygame.key.get_pressed()
 
-            if level.person.animation_active:
-                if level.person.walk or level.person.jump:
-                    if keys[pygame.K_LEFT]:
-                        background.position_x += background.speed
-                    elif keys[pygame.K_RIGHT]:
-                        background.position_x -= background.speed
+                if level.person.animation_active:
+                    if level.person.walk or level.person.jump:
+                        if keys[pygame.K_LEFT]:
+                            background.position_x += background.speed
+                        elif keys[pygame.K_RIGHT]:
+                            background.position_x -= background.speed
 
-                level.person.animation()
-                level.weapon.animation()
-            if pygame.sprite.collide_mask(level.person, level.weapon2):
-                level.health_bar_player1.lives-=1
-            if pygame.sprite.collide_mask(level.person2, level.weapon):
-                level.health_bar_player2.lives -= 1
-            screen.fill((0, 0, 0))
-            background.bliting()
-            if level.sword_effect.animation_active:
-                level.sword_effect.animation()
-                effects.draw(screen)
-                effects.update(screen)
-            all_sprites.draw(screen)
-            all_sprites.update(screen)
-            level.health_bar_player1.blitting(1)
-            level.health_bar_player2.blitting(2)
+                    level.person.animation()
+                    level.weapon.animation()
+                if pygame.sprite.collide_mask(level.person, level.weapon2):
+                    level.health_bar_player1.lives-=20
+                elif pygame.sprite.collide_mask(level.person2, level.weapon):
+                    level.health_bar_player2.lives -= 20
+                if level.health_bar_player2.lives<=0:
+                    winner = "player 1"
+                elif level.health_bar_player1.lives<=0:
+                    winner = "player 2"
+
+                screen.fill((0, 0, 0))
+                background.bliting()
+                if level.sword_effect.animation_active:
+                    level.sword_effect.animation()
+                    effects.draw(screen)
+                    effects.update(screen)
+                all_sprites.draw(screen)
+                all_sprites.update(screen)
+                level.health_bar_player1.blitting(1)
+                level.health_bar_player2.blitting(2)
+            else:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                        game_mode = -1
+                        game_runnung=False
+                game_overs.draw(screen)
+                game_over.animation()
             pygame.display.update((0, 0, screen_width, screen_height))
             clock.tick(fps)
             pygame.display.set_caption(str(clock.get_fps()))
