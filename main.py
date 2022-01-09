@@ -22,6 +22,8 @@ class LevelObject(pygame.sprite.Sprite):
         if person:
             if person == 1:
                 self.image = pygame.image.load("data/person1.png").convert_alpha()
+            if person == 2:
+                self.image = pygame.image.load("data/person2.png").convert_alpha()
             self.rect = self.image.get_rect()
             self.person = True
             self.speed = background.speed
@@ -29,7 +31,8 @@ class LevelObject(pygame.sprite.Sprite):
         elif weapon:
             if weapon == 1:
                 self.image = pygame.image.load("data/fists.png").convert_alpha()
-
+            if weapon == 2:
+                self.image = pygame.image.load("data/fists2.png").convert_alpha()
             self.rect = self.image.get_rect()
             self.weapon = True
             self.person_number = weapon
@@ -621,6 +624,11 @@ while running:
                     text = font.render("fight again", True, (0, 255, 0))
                     screen.blit(text, (900, 550))
                     text = font.render(f"winner is {winner}", True, (0, 255, 0))
+                    screen.blit(text, (900, 250))
+                    if winner == "player 1":
+                        text = font.render(f"scores: {level.health_bar_player1.lives*100}", True, (0, 255, 0))
+                    else:
+                        text = font.render(f"scores: {level.health_bar_player2.lives*100}", True, (0, 255, 0))
                     screen.blit(text, (900, 350))
             pygame.display.update((0, 0, screen_width, screen_height))
             clock.tick(fps)
