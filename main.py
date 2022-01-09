@@ -182,17 +182,18 @@ class Lives():
             pass
             pygame.draw.rect(screen, (255, 0, 0), (screen_width//2+16, 8, int(screen_width//2/100*self.lives), 34))
 class Level():
-    def __init__(self, level):
+    def __init__(self, level,player1_person,player2_person):
         if level == 1:
             x = screen_width // 2 - 250
             y = screen_height - 500
-            self.person = LevelObject(1, False, x, y)
-            self.weapon = LevelObject(False, 1, x, y)
+
+            self.person = LevelObject(player1_person, False, x, y)
+            self.weapon = LevelObject(False, player1_person, x, y)
             self.sword_effect = Effect(1,x,y)
             self.health_bar_player1 = Lives(0,0)
 
-            self.person2 = LevelObject(1, False, screen_width-x, y)
-            self.weapon2= LevelObject(False, 1, screen_width-x, y)
+            self.person2 = LevelObject(player2_person, False, screen_width-x, y)
+            self.weapon2= LevelObject(False, player2_person, screen_width-x, y)
             self.health_bar_player1 = Lives(0, 0)
             self.health_bar_player2 = Lives(screen_width//2,0)
 class MainMenuObject(pygame.sprite.Sprite):
@@ -401,7 +402,7 @@ while running:
         game_over = Game_over()
         background = Background()
         background.load_background(0)
-        level = Level(1)
+        level = Level(1,1,2)
         game_runnung = True
         winner = False
 
