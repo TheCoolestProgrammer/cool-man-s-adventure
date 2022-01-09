@@ -329,7 +329,7 @@ class Main_menu():
             image = pygame.transform.flip(image, True, False)
             screen.blit(image, (screen_width-400, 0))
 
-            image = pygame.image.load(f"data/fists{hero%heroes_list_len+1}.png")
+            image = pygame.image.load(f"data/fists{hero2%heroes_list_len+1}.png")
             image = pygame.transform.flip(image,True,False)
             screen.blit(image, (screen_width-400, 0))
             text = font.render("ACCEPT", True, (0, 255, 0))
