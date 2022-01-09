@@ -582,9 +582,9 @@ while running:
                             level.sword_effect.rect.x += level.person.speed
                     level.person2.animation()
                     level.weapon2.animation()
-                if pygame.sprite.collide_mask(level.person, level.weapon2):
+                if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk:
                     level.health_bar_player1.lives-=2
-                elif pygame.sprite.collide_mask(level.person2, level.weapon):
+                elif pygame.sprite.collide_mask(level.person2, level.weapon) and level.weapon.animation_active and not level.person.walk:
                     level.health_bar_player2.lives -= 2
                 if level.health_bar_player2.lives<=0:
                     winner = "player 1"
