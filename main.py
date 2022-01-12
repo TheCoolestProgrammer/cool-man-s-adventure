@@ -145,6 +145,7 @@ class LevelObject(pygame.sprite.Sprite):
                 self.image = pygame.image.load("data/fists2.png")
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
+        self.mask = pygame.mask.from_surface(self.image)
         self.now_frame=0
         self.counter_tics=0
         self.max_value_anim=5
