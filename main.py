@@ -406,6 +406,7 @@ hero = 0
 hero2 = 0
 game_mode = 0
 
+
 while running:
     if game_mode == 3:
         all_sprites = pygame.sprite.Group()
@@ -414,7 +415,7 @@ while running:
         game_over = Game_over()
         background = Background()
         background.load_background(0)
-        level = Level(1,1,2)
+        level = Level(1,hero%heroes_list_len+1,hero2%heroes_list_len+1)
         game_runnung = True
         winner = False
 
