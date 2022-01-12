@@ -410,7 +410,9 @@ hero = 0
 hero2 = 0
 game_mode = 0
 
-
+player1 = [pygame.K_u, pygame.K_h, pygame.K_k, pygame.K_i, pygame.K_o, pygame.K_l,
+                                       pygame.K_j]
+player2 = [pygame.K_e,pygame.K_f,pygame.K_s,pygame.K_SPACE,pygame.K_q,pygame.K_d,pygame.K_a]
 while running:
     if game_mode == 3:
         all_sprites = pygame.sprite.Group()
@@ -432,33 +434,34 @@ while running:
                         game_runnung=False
                     if not level.person2.animation_active or not level.weapon2.animation_active:
                         if event.type == pygame.KEYDOWN:
-                            if event.key == pygame.K_u:
+                            if event.key == player1[0]:
                                 level.person2.normal_weapon_punch = True
                                 level.weapon2.normal_weapon_punch = True
                                 level.person2.animation_active = True
                                 level.weapon2.animation_active = True
-                            if event.key == pygame.K_h:
+
+                            if event.key == player1[1]:
                                 level.person2.block = True
                                 level.weapon2.block = True
                                 level.person2.animation_active = True
                                 level.weapon2.animation_active = True
-                            if event.key == pygame.K_k:
+                            if event.key == player1[2]:
                                 level.person2.animation_active = True
                                 level.weapon2.animation_active = True
                                 level.person2.sitting = True
                                 level.weapon2.sitting = True
 
-                            if event.key == pygame.K_i:
+                            if event.key == player1[3]:
                                 level.person2.animation_active = True
                                 level.weapon2.animation_active = True
                                 level.person2.jump = True
                                 level.weapon2.jump = True
-                            if event.key == pygame.K_o:
+                            if event.key == player1[4]:
                                 level.person2.super_punch = True
                                 level.weapon2.super_punch = True
                                 level.person2.animation_active = True
                                 level.weapon2.animation_active = True
-                            if event.key == pygame.K_l:
+                            if event.key == player1[5]:
                                 level.person2.look_right = True
                                 level.weapon2.look_right = True
                                 level.person2.back(level.person.person, False)
@@ -467,7 +470,7 @@ while running:
                                 level.weapon2.walk = True
                                 level.person2.animation_active = True
                                 level.weapon2.animation_active = True
-                            elif event.key == pygame.K_j:
+                            elif event.key == player1[6]:
                                 level.person2.look_right = False
                                 level.weapon2.look_right = False
                                 level.person2.back(level.person.person, False)
@@ -479,38 +482,38 @@ while running:
                     if not level.person.animation_active or not level.weapon.animation_active:
 
                         if event.type == pygame.KEYDOWN:
-                            if event.key == pygame.K_e:
+                            if event.key == player2[0]:
                                 level.person.normal_weapon_punch = True
                                 level.weapon.normal_weapon_punch = True
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
 
-                            if event.key == pygame.K_f:
+                            if event.key == player2[1]:
                                 level.person.block = True
                                 level.weapon.block = True
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
 
-                            if event.key == pygame.K_s:
+                            if event.key == player2[2]:
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
                                 level.person.sitting = True
                                 level.weapon.sitting = True
 
-                            if event.key == pygame.K_SPACE:
+                            if event.key == player2[3]:
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
                                 level.person.jump = True
                                 level.weapon.jump = True
 
-                            if event.key == pygame.K_q:
+                            if event.key == player2[4]:
                                 level.person.super_punch=True
                                 level.weapon.super_punch=True
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
                                 level.sword_effect.animation_active=True
 
-                            if event.key == pygame.K_d:
+                            if event.key == player2[5]:
                                 level.person.look_right = True
                                 level.weapon.look_right = True
                                 level.person.back(level.person.person, False)
@@ -520,7 +523,7 @@ while running:
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
 
-                            elif event.key == pygame.K_a:
+                            elif event.key == player2[6]:
                                 level.person.look_right = False
                                 level.weapon.look_right = False
                                 level.person.back(level.person.person, False)
