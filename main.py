@@ -212,7 +212,7 @@ class MainMenuObject(pygame.sprite.Sprite):
     def __init__(self, value, x=0, y=0):
         super().__init__(all_sprites)
 
-        if value == 0 or value == 4 or value == 5:
+        if value == 0 or value == 4 or value == 5or value == 6:
             self.image = pygame.image.load("data/menu_button.png")
         elif value == 1:
             self.image = pygame.image.load("data/menu_button_up_down.png")
@@ -233,6 +233,9 @@ class MainMenuObject(pygame.sprite.Sprite):
             elif value == 5:
                 self.rect.x = 900
                 self.rect.y = 550
+            elif value == 6:
+                self.rect.x = 900
+                self.rect.y = 650
             elif menu.slide == 0:
                 if value == 0:
                     self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
@@ -243,6 +246,7 @@ class MainMenuObject(pygame.sprite.Sprite):
                 elif value == 2:
                     self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
                     self.rect.y = 650
+
             elif menu.slide == 1:
                 if value == 0:
                     self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
@@ -657,8 +661,13 @@ while running:
                     winner = "player 2"
                 if winner:
                     all_sprites = pygame.sprite.Group()
+                    if winner == "player 1":
+                        scores = level.health_bar_player1.lives*100
+                    else:
+                        scores = level.health_bar_player2.lives * 100
                     button1 = MainMenuObject(4)
                     button2 = MainMenuObject(5)
+                    button3 = MainMenuObject(6)
                 screen.fill((0, 0, 0))
                 background.bliting()
                 if level.sword_effect.animation_active:
@@ -685,6 +694,13 @@ while running:
                             if pygame.sprite.collide_mask(button2, mouse):
                                 game_mode = 2
                                 game_runnung=False
+                            if pygame.sprite.collide_mask(button3, mouse):
+                                text = font.render(f"write your name in console", True, (0, 255, 0))
+                                screen.blit(text, (0, 650))
+                                pygame.display.update((0, 0, screen_width, screen_height))
+                                name = input()
+                                a = open("data/scores.txt",mode="a",encoding="UTF-8")
+                                a.write("\n"+name+": "+str(scores))
                 game_overs.draw(screen)
                 game_over.animation()
                 if game_over.now_frame >=12:
@@ -697,10 +713,12 @@ while running:
                     text = font.render(f"winner is {winner}", True, (0, 255, 0))
                     screen.blit(text, (900, 250))
                     if winner == "player 1":
-                        text = font.render(f"scores: {level.health_bar_player1.lives*100}", True, (0, 255, 0))
+                        text = font.render(f"scores: {scores}", True, (0, 255, 0))
                     else:
-                        text = font.render(f"scores: {level.health_bar_player2.lives*100}", True, (0, 255, 0))
+                        text = font.render(f"scores: {scores}", True, (0, 255, 0))
                     screen.blit(text, (900, 350))
+                    text = font.render(f"save result", True, (0, 255, 0))
+                    screen.blit(text, (900, 650))
             pygame.display.update((0, 0, screen_width, screen_height))
             clock.tick(fps)
             pygame.display.set_caption(str(clock.get_fps()))
