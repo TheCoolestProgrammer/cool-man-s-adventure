@@ -199,8 +199,8 @@ class Level():
 
             self.person = LevelObject(player1_person, False, x, y)
             self.weapon = LevelObject(False, player1_person, x, y)
-            if player1_person==1:
-                self.sword_effect = Effect(1,x,y)
+            # if player1_person==1:
+            #     self.sword_effect = Effect(1,x,y)
             self.health_bar_player1 = Lives(0,0)
 
             self.person2 = LevelObject(player2_person, False, screen_width-x, y)
@@ -415,7 +415,9 @@ player1 = [pygame.K_u, pygame.K_h, pygame.K_k, pygame.K_i, pygame.K_o, pygame.K_
                                        pygame.K_j]
 player2 = [pygame.K_e,pygame.K_f,pygame.K_s,pygame.K_SPACE,pygame.K_q,pygame.K_d,pygame.K_a]
 while running:
-    if game_mode == 3:
+    if game_mode==4:
+        pass
+    elif game_mode == 3:
         all_sprites = pygame.sprite.Group()
         effects = pygame.sprite.Group()
         game_overs = pygame.sprite.Group()
@@ -512,7 +514,7 @@ while running:
                                 level.weapon.super_punch=True
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
-                                level.sword_effect.animation_active=True
+                                # level.sword_effect.animation_active=True
 
                             if event.key == player2[5]:
                                 level.person.look_right = True
@@ -588,7 +590,7 @@ while running:
                                 else:
                                     level.person.rect.x -= level.person.speed+5
                                     level.weapon.rect.x -= level.person.speed+5
-                                    level.sword_effect.rect.x -= level.person.speed+5
+                                    # level.sword_effect.rect.x -= level.person.speed+5
                             else:
                                 if level.person.person_number == 2:
                                     level.person.rect.x -= level.person.speed
@@ -596,7 +598,7 @@ while running:
                                 else:
                                     level.person.rect.x -= level.person.speed
                                     level.weapon.rect.x -= level.person.speed
-                                    level.sword_effect.rect.x -= level.person.speed
+                                    # level.sword_effect.rect.x -= level.person.speed
                         elif keys[player2[5]]:
                             if level.person.jump:
                                 if level.person.person_number == 2:
@@ -605,7 +607,7 @@ while running:
                                 else:
                                     level.person.rect.x += level.person.speed + 5
                                     level.weapon.rect.x += level.person.speed + 5
-                                    level.sword_effect.rect.x += level.person.speed + 5
+                                    # level.sword_effect.rect.x += level.person.speed + 5
                             else:
                                 if level.person.person_number == 2:
                                     level.person.rect.x += level.person.speed
@@ -613,7 +615,7 @@ while running:
                                 else:
                                     level.person.rect.x += level.person.speed
                                     level.weapon.rect.x += level.person.speed
-                                    level.sword_effect.rect.x += level.person.speed
+                                    # level.sword_effect.rect.x += level.person.speed
                     level.person.animation()
                     level.weapon.animation()
                 if level.person2.animation_active:
@@ -626,7 +628,7 @@ while running:
                                 else:
                                     level.person2.rect.x -= level.person2.speed + 5
                                     level.weapon2.rect.x -= level.person2.speed + 5
-                                    level.sword_effect.rect.x -= level.person2.speed + 5
+                                    # level.sword_effect.rect.x -= level.person2.speed + 5
                             else:
                                 if level.person.person_number == 2:
                                     level.person2.rect.x -= level.person2.speed
@@ -634,7 +636,7 @@ while running:
                                 else:
                                     level.person2.rect.x -= level.person2.speed
                                     level.weapon2.rect.x -= level.person2.speed
-                                    level.sword_effect.rect.x -= level.person2.speed
+                                    # level.sword_effect.rect.x -= level.person2.speed
                                     #level.sword_effect2.rect.x -= level.person.speed
                         elif keys[player1[5]]:
                             if level.person2.jump:
@@ -644,7 +646,7 @@ while running:
                                 else:
                                     level.person2.rect.x += level.person2.speed + 5
                                     level.weapon2.rect.x += level.person2.speed + 5
-                                    level.sword_effect.rect.x += level.person2.speed + 5
+                                    # level.sword_effect.rect.x += level.person2.speed + 5
                             else:
                                 if level.person2.person_number == 2:
                                     level.person2.rect.x += level.person2.speed
@@ -652,7 +654,7 @@ while running:
                                 else:
                                     level.person2.rect.x += level.person2.speed
                                     level.weapon2.rect.x += level.person2.speed
-                                    level.sword_effect.rect.x += level.person2.speed
+                                    # level.sword_effect.rect.x += level.person2.speed
                     level.person2.animation()
                     level.weapon2.animation()
                 if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk and not level.person2.sitting:
@@ -680,10 +682,10 @@ while running:
                     button3 = MainMenuObject(6)
                 screen.fill((0, 0, 0))
                 background.bliting()
-                if level.sword_effect.animation_active:
-                    level.sword_effect.animation()
-                    effects.draw(screen)
-                    effects.update(screen)
+                # if level.person.person == 1 and level.sword_effect.animation_active:
+                #     level.sword_effect.animation()
+                #     effects.draw(screen)
+                #     effects.update(screen)
                 all_sprites.draw(screen)
                 all_sprites.update(screen)
                 level.health_bar_player1.blitting(1)
