@@ -69,6 +69,11 @@ class LevelObject(pygame.sprite.Sprite):
                 elif self.super_punch:
                     self.max_value_anim = 9
                     self.image = pygame.image.load(f"data/person{self.person_number}_sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    if self.person_number== 2:
+                        if self.look_right:
+                            self.rect.x +=90
+                        else:
+                            self.rect.x -= 90
                 elif self.jump:
                     self.max_value_anim=10
                     self.image = pygame.image.load(f"data/jump_person{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
@@ -92,6 +97,11 @@ class LevelObject(pygame.sprite.Sprite):
                 elif self.super_punch:
                     self.max_value_anim = 9
                     self.image = pygame.image.load(f"data/{self.person_number}sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    if self.person_number== 2:
+                        if self.look_right:
+                            self.rect.x +=90
+                        else:
+                            self.rect.x -= 90
                 elif self.jump:
                     self.max_value_anim = 10
                     self.image = pygame.image.load(f"data/jump_hands{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
@@ -442,7 +452,6 @@ while running:
                                 level.weapon2.super_punch = True
                                 level.person2.animation_active = True
                                 level.weapon2.animation_active = True
-                                level.sword_effect.animation_active = True
                             if event.key == pygame.K_l:
                                 level.person2.look_right = True
                                 level.weapon2.look_right = True
@@ -584,9 +593,9 @@ while running:
                             #level.sword_effect2.rect.x += level.person.speed
                     level.person2.animation()
                     level.weapon2.animation()
-                if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk:
+                if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk and not level.person2.sitting:
                     level.health_bar_player1.lives-=2
-                elif pygame.sprite.collide_mask(level.person2, level.weapon) and level.weapon.animation_active and not level.person.walk:
+                elif pygame.sprite.collide_mask(level.person2, level.weapon) and level.weapon.animation_active and not level.person.walk and not level.person.sitting:
                     level.health_bar_player2.lives -= 2
                 if level.health_bar_player2.lives<=0:
                     winner = "player 1"
