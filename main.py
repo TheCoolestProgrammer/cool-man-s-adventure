@@ -652,9 +652,15 @@ while running:
                     level.person2.animation()
                     level.weapon2.animation()
                 if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk and not level.person2.sitting:
-                    level.health_bar_player1.lives-=2
+                    if level.person.block:
+                        level.health_bar_player1.lives -= 1
+                    else:
+                        level.health_bar_player1.lives-=2
                 elif pygame.sprite.collide_mask(level.person2, level.weapon) and level.weapon.animation_active and not level.person.walk and not level.person.sitting:
-                    level.health_bar_player2.lives -= 2
+                    if level.person2.block:
+                        level.health_bar_player2.lives -= 1
+                    else:
+                        level.health_bar_player2.lives -= 2
                 if level.health_bar_player2.lives<=0:
                     winner = "player 1"
                 elif level.health_bar_player1.lives<=0:
