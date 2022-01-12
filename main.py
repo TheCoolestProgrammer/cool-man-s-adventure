@@ -570,27 +570,79 @@ while running:
 
                 if level.person.animation_active:
                     if level.person.walk or level.person.jump:
-
                         if keys[pygame.K_a]:
-                            level.person.rect.x -= level.person.speed
-                            level.weapon.rect.x -= level.person.speed
-                            level.sword_effect.rect.x -= level.person.speed
+                            if level.person.jump:
+                                if level.person.person_number == 2:
+                                    level.person.rect.x -= level.person.speed + 20
+                                    level.weapon.rect.x -= level.person.speed + 20
+                                else:
+                                    level.person.rect.x -= level.person.speed+5
+                                    level.weapon.rect.x -= level.person.speed+5
+                                    level.sword_effect.rect.x -= level.person.speed+5
+                            else:
+                                if level.person.person_number == 2:
+                                    level.person.rect.x -= level.person.speed
+                                    level.weapon.rect.x -= level.person.speed
+                                else:
+                                    level.person.rect.x -= level.person.speed
+                                    level.weapon.rect.x -= level.person.speed
+                                    level.sword_effect.rect.x -= level.person.speed
                         elif keys[pygame.K_d]:
-                            level.person.rect.x += level.person.speed
-                            level.weapon.rect.x += level.person.speed
-                            level.sword_effect.rect.x +=level.person.speed
+                            if level.person.jump:
+                                if level.person.person_number == 2:
+                                    level.person.rect.x += level.person.speed + 20
+                                    level.weapon.rect.x += level.person.speed + 20
+                                else:
+                                    level.person.rect.x += level.person.speed + 5
+                                    level.weapon.rect.x += level.person.speed + 5
+                                    level.sword_effect.rect.x += level.person.speed + 5
+                            else:
+                                if level.person.person_number == 2:
+                                    level.person.rect.x += level.person.speed
+                                    level.weapon.rect.x += level.person.speed
+                                else:
+                                    level.person.rect.x += level.person.speed
+                                    level.weapon.rect.x += level.person.speed
+                                    level.sword_effect.rect.x += level.person.speed
                     level.person.animation()
                     level.weapon.animation()
                 if level.person2.animation_active:
                     if level.person2.walk or level.person2.jump:
                         if keys[pygame.K_j]:
-                            level.person2.rect.x -= level.person.speed
-                            level.weapon2.rect.x -= level.person.speed
-                            #level.sword_effect2.rect.x -= level.person.speed
+                            if level.person2.jump:
+                                if level.person2.person_number == 2:
+                                    level.person2.rect.x -= level.person2.speed + 20
+                                    level.weapon2.rect.x -= level.person2.speed + 20
+                                else:
+                                    level.person2.rect.x -= level.person2.speed + 5
+                                    level.weapon2.rect.x -= level.person2.speed + 5
+                                    level.sword_effect.rect.x -= level.person2.speed + 5
+                            else:
+                                if level.person.person_number == 2:
+                                    level.person2.rect.x -= level.person2.speed
+                                    level.weapon2.rect.x -= level.person2.speed
+                                else:
+                                    level.person2.rect.x -= level.person2.speed
+                                    level.weapon2.rect.x -= level.person2.speed
+                                    level.sword_effect.rect.x -= level.person2.speed
+                                    #level.sword_effect2.rect.x -= level.person.speed
                         elif keys[pygame.K_l]:
-                            level.person2.rect.x += level.person.speed
-                            level.weapon2.rect.x += level.person.speed
-                            #level.sword_effect2.rect.x += level.person.speed
+                            if level.person2.jump:
+                                if level.person2.person_number == 2:
+                                    level.person2.rect.x += level.person2.speed + 20
+                                    level.weapon2.rect.x += level.person2.speed + 20
+                                else:
+                                    level.person2.rect.x += level.person2.speed + 5
+                                    level.weapon2.rect.x += level.person2.speed + 5
+                                    level.sword_effect.rect.x += level.person2.speed + 5
+                            else:
+                                if level.person2.person_number == 2:
+                                    level.person2.rect.x += level.person2.speed
+                                    level.weapon2.rect.x += level.person2.speed
+                                else:
+                                    level.person2.rect.x += level.person2.speed
+                                    level.weapon2.rect.x += level.person2.speed
+                                    level.sword_effect.rect.x += level.person2.speed
                     level.person2.animation()
                     level.weapon2.animation()
                 if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk and not level.person2.sitting:
