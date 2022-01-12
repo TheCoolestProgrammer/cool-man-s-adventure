@@ -1,0 +1,2 @@
+pygame.K_u, pygame.K_h, pygame.K_k, pygame.K_i, pygame.K_o, pygame.K_l, pygame.K_j
+pygame.K_e, pygame.K_f, pygame.K_s, pygame.K_SPACE, pygame.K_q, pygame.K_d, pygame.K_a

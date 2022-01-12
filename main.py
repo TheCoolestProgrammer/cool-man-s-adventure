@@ -409,7 +409,10 @@ heroes_list_len = 2
 hero = 0
 hero2 = 0
 game_mode = 0
-
+# a = open("data/controls.txt",mode="r",encoding="UTF-8").readlines()
+# player1 = a[0].strip().split(", ")
+# player2 = a[1].strip().split(", ")
+# print(player1,player2)
 player1 = [pygame.K_u, pygame.K_h, pygame.K_k, pygame.K_i, pygame.K_o, pygame.K_l,
                                        pygame.K_j]
 player2 = [pygame.K_e,pygame.K_f,pygame.K_s,pygame.K_SPACE,pygame.K_q,pygame.K_d,pygame.K_a]
@@ -533,42 +536,42 @@ while running:
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
                     if event.type == pygame.KEYUP:
-                        if level.person.walk and (event.key == pygame.K_d or event.key == pygame.K_a):
+                        if level.person.walk and (event.key == player2[5] or event.key == player2[6]):
                             level.person.walk = False
                             level.weapon.walk = False
                             level.person.animation_active = False
                             level.weapon.animation_active = False
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
-                        if level.person2.walk and (event.key == pygame.K_j or event.key == pygame.K_l):
+                        if level.person2.walk and (event.key == player1[5] or event.key == player1[6]):
                             level.person2.walk = False
                             level.weapon2.walk = False
                             level.person2.animation_active = False
                             level.weapon2.animation_active = False
                             level.person2.back(level.person2.person, False)
                             level.weapon2.back(False, level.weapon2.weapon)
-                        if level.person.sitting and event.key == pygame.K_s:
+                        if level.person.sitting and event.key == player2[2]:
                             level.person.sitting = False
                             level.weapon.sitting= False
                             level.person.animation_active = False
                             level.weapon.animation_active = False
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
-                        if level.person2.sitting and event.key == pygame.K_k:
+                        if level.person2.sitting and event.key == player1[2]:
                             level.person2.sitting = False
                             level.weapon2.sitting= False
                             level.person2.animation_active = False
                             level.weapon2.animation_active = False
                             level.person2.back(level.person2.person, False)
                             level.weapon2.back(False, level.weapon2.weapon)
-                        if event.key == pygame.K_f and level.person.block:
+                        if event.key == player2[1] and level.person.block:
                             level.person.block = False
                             level.weapon.block = False
                             level.person.animation_active = False
                             level.weapon.animation_active = False
                             level.person.back(level.person.person,False)
                             level.weapon.back(False,level.weapon.weapon)
-                        if event.key == pygame.K_h and level.person2.block:
+                        if event.key == player1[1] and level.person2.block:
                             level.person2.block = False
                             level.weapon2.block = False
                             level.person2.animation_active = False
@@ -579,7 +582,7 @@ while running:
 
                 if level.person.animation_active:
                     if level.person.walk or level.person.jump:
-                        if keys[pygame.K_a]:
+                        if keys[player2[6]]:
                             if level.person.jump:
                                 if level.person.person_number == 2:
                                     level.person.rect.x -= level.person.speed + 20
@@ -596,7 +599,7 @@ while running:
                                     level.person.rect.x -= level.person.speed
                                     level.weapon.rect.x -= level.person.speed
                                     level.sword_effect.rect.x -= level.person.speed
-                        elif keys[pygame.K_d]:
+                        elif keys[player2[5]]:
                             if level.person.jump:
                                 if level.person.person_number == 2:
                                     level.person.rect.x += level.person.speed + 20
@@ -617,7 +620,7 @@ while running:
                     level.weapon.animation()
                 if level.person2.animation_active:
                     if level.person2.walk or level.person2.jump:
-                        if keys[pygame.K_j]:
+                        if keys[player1[6]]:
                             if level.person2.jump:
                                 if level.person2.person_number == 2:
                                     level.person2.rect.x -= level.person2.speed + 20
@@ -635,7 +638,7 @@ while running:
                                     level.weapon2.rect.x -= level.person2.speed
                                     level.sword_effect.rect.x -= level.person2.speed
                                     #level.sword_effect2.rect.x -= level.person.speed
-                        elif keys[pygame.K_l]:
+                        elif keys[player1[5]]:
                             if level.person2.jump:
                                 if level.person2.person_number == 2:
                                     level.person2.rect.x += level.person2.speed + 20
