@@ -166,7 +166,6 @@ class Effect(pygame.sprite.Sprite):
         effects.add(self)
 
     def animation(self):
-        print(self.now_frame,self.max_value_anim)
         if self.counter_tics >= self.tics:
             self.counter_tics = 0
             self.now_frame += 1
@@ -200,7 +199,8 @@ class Level():
 
             self.person = LevelObject(player1_person, False, x, y)
             self.weapon = LevelObject(False, player1_person, x, y)
-            self.sword_effect = Effect(1,x,y)
+            if player1_person==1:
+                self.sword_effect = Effect(1,x,y)
             self.health_bar_player1 = Lives(0,0)
 
             self.person2 = LevelObject(player2_person, False, screen_width-x, y)
@@ -328,8 +328,6 @@ class Main_menu():
             if self.active_button == 0:
                 text = font.render("LOCAL", True, (0, 255, 0))
             elif self.active_button == 1:
-                text = font.render("ENTERNET", True, (0, 255, 0))
-            elif self.active_button == 2:
                 text = font.render("EXIT", True, (0, 255, 0))
             screen.blit(text, (menu.button.rect.x+menu.button.rect.x//8*6,menu.button.rect.y))
         else:
@@ -742,7 +740,7 @@ while running:
         if game_mode == 0:
             buttons_count = 4
         elif game_mode == 1:
-            buttons_count=3
+            buttons_count=2
         else:
             buttons_count=1
         while menu_running:
@@ -758,13 +756,11 @@ while running:
                         if game_mode<2:
                             if not menu.animation_active:
                                 if pygame.sprite.collide_mask(menu.button_up, mouse):
-                                    print("moving up")
                                     menu.active_button -= 1
                                     menu.active_button %= buttons_count
                                     menu.animation_active = True
                                     menu.animation_up = True
                                 elif pygame.sprite.collide_mask(menu.button_down, mouse):
-                                    print("moving down")
                                     menu.active_button += 1
                                     menu.active_button %= buttons_count
                                     menu.animation_active = True
