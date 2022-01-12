@@ -58,80 +58,80 @@ class LevelObject(pygame.sprite.Sprite):
         if self.counter_tics >= self.tics:
             self.counter_tics = 0
             self.now_frame += 1
-            if self.person_number == 1:
-                if self.person:
-                    if self.walk:
-                        self.max_value_anim = 5
-                        self.image = pygame.image.load(f"data/person{self.person_number}_walk_anim{self.now_frame % self.max_value_anim + 1}.png")
-                    elif self.normal_weapon_punch:
-                        self.max_value_anim = 6
-                        self.image = pygame.image.load(f"data/person{self.person_number}.png")
-                    elif self.super_punch:
-                        self.max_value_anim = 9
-                        self.image = pygame.image.load(f"data/person{self.person_number}_sword_punch{self.now_frame % self.max_value_anim + 1}.png")
-                    elif self.jump:
-                        self.max_value_anim=10
-                        self.image = pygame.image.load(f"data/jump_person{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
-                        self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
-                    elif self.block:
-                        self.max_value_anim+=1
-                        self.image = pygame.image.load(f"data/person{self.person_number}.png")
-                    elif self.sitting:
-                        self.max_value_anim += 1
-                        self.image = pygame.image.load(f"data/sitting_{self.person_number}.png")
-                    if not self.look_right:
-                        self.image = pygame.transform.flip(self.image, True, False)
-                elif self.weapon:
 
-                    if self.walk:
-                        self.max_value_anim = 5
-                        self.image = pygame.image.load(f"data/fists_{self.person_number}_walk_animation{self.now_frame % self.max_value_anim + 1}.png")
-                    elif self.normal_weapon_punch:
-                        self.max_value_anim = 6
-                        self.image = pygame.image.load(f"data/fists_{self.person_number}_punch{self.now_frame % self.max_value_anim + 1}.png")
-                    elif self.super_punch:
-                        self.max_value_anim = 9
-                        self.image = pygame.image.load(f"data/{self.person_number}sword_punch{self.now_frame % self.max_value_anim + 1}.png")
-                    elif self.jump:
-                        self.max_value_anim = 10
-                        self.image = pygame.image.load(f"data/jump_hands{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
-                        self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
-                    elif self.block:
-                        self.max_value_anim+=1
-                        self.image = pygame.image.load(f"data/block{self.person_number}.png")
-                    elif self.sitting:
-                        self.max_value_anim += 1
-                        self.image = pygame.image.load(f"data/sitting_{self.person_number}.png")
-                    if not self.look_right:
-                        self.image = pygame.transform.flip(self.image, True, False)
+            if self.person:
+                if self.walk:
+                    self.max_value_anim = 5
+                    self.image = pygame.image.load(f"data/person{self.person_number}_walk_anim{self.now_frame % self.max_value_anim + 1}.png")
+                elif self.normal_weapon_punch:
+                    self.max_value_anim = 6
+                    self.image = pygame.image.load(f"data/person{self.person_number}.png")
+                elif self.super_punch:
+                    self.max_value_anim = 9
+                    self.image = pygame.image.load(f"data/person{self.person_number}_sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                elif self.jump:
+                    self.max_value_anim=10
+                    self.image = pygame.image.load(f"data/jump_person{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
+                    self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
+                elif self.block:
+                    self.max_value_anim+=1
+                    self.image = pygame.image.load(f"data/person{self.person_number}.png")
+                elif self.sitting:
+                    self.max_value_anim += 1
+                    self.image = pygame.image.load(f"data/sitting_{self.person_number}.png")
+                if not self.look_right:
+                    self.image = pygame.transform.flip(self.image, True, False)
+            elif self.weapon:
 
-                if self.max_value_anim == self.now_frame:
-                    if self.normal_weapon_punch:
-                        self.normal_weapon_punch = False
-                        self.animation_active = False
-                    elif self.super_punch:
-                        self.super_punch = False
-                        self.animation_active = False
-                    elif self.jump:
-                        self.jump=False
-                        self.animation_active=False
-                        self.rect.y = screen_height - 500
-                    self.back(self.person,self.weapon)
-                self.mask = pygame.mask.from_surface(self.image)
+                if self.walk:
+                    self.max_value_anim = 5
+                    self.image = pygame.image.load(f"data/fists_{self.person_number}_walk_animation{self.now_frame % self.max_value_anim + 1}.png")
+                elif self.normal_weapon_punch:
+                    self.max_value_anim = 6
+                    self.image = pygame.image.load(f"data/fists_{self.person_number}_punch{self.now_frame % self.max_value_anim + 1}.png")
+                elif self.super_punch:
+                    self.max_value_anim = 9
+                    self.image = pygame.image.load(f"data/{self.person_number}sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                elif self.jump:
+                    self.max_value_anim = 10
+                    self.image = pygame.image.load(f"data/jump_hands{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
+                    self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
+                elif self.block:
+                    self.max_value_anim+=1
+                    self.image = pygame.image.load(f"data/block{self.person_number}.png")
+                elif self.sitting:
+                    self.max_value_anim += 1
+                    self.image = pygame.image.load(f"data/sitting_{self.person_number}.png")
+                if not self.look_right:
+                    self.image = pygame.transform.flip(self.image, True, False)
+
+            if self.max_value_anim == self.now_frame:
+                if self.normal_weapon_punch:
+                    self.normal_weapon_punch = False
+                    self.animation_active = False
+                elif self.super_punch:
+                    self.super_punch = False
+                    self.animation_active = False
+                elif self.jump:
+                    self.jump=False
+                    self.animation_active=False
+                    self.rect.y = screen_height - 500
+                self.back(self.person,self.weapon)
+            self.mask = pygame.mask.from_surface(self.image)
 
         self.counter_tics += 1
     def back(self,person,weapon):
         if self.person:
-            if person == 1:
+            if self.person_number == 1:
                 self.image = pygame.image.load("data/person1.png")
-            elif person == 2:
+            elif self.person_number == 2:
                 self.image = pygame.image.load("data/person2.png")
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
         elif self.weapon:
-            if weapon == 1:
+            if self.person_number == 1:
                 self.image = pygame.image.load("data/fists1.png")
-            elif weapon == 2:
+            elif self.person_number== 2:
                 self.image = pygame.image.load("data/fists2.png")
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
@@ -194,6 +194,7 @@ class Level():
 
             self.person2 = LevelObject(player2_person, False, screen_width-x, y)
             self.weapon2= LevelObject(False, player2_person, screen_width-x, y)
+            #self.sword_effect2 = Effect(1, screen_width-x, y)
             self.health_bar_player1 = Lives(0, 0)
             self.health_bar_player2 = Lives(screen_width//2,0)
 class MainMenuObject(pygame.sprite.Sprite):
@@ -576,11 +577,11 @@ while running:
                         if keys[pygame.K_j]:
                             level.person2.rect.x -= level.person.speed
                             level.weapon2.rect.x -= level.person.speed
-                            level.sword_effect.rect.x -= level.person.speed
+                            #level.sword_effect2.rect.x -= level.person.speed
                         elif keys[pygame.K_l]:
                             level.person2.rect.x += level.person.speed
                             level.weapon2.rect.x += level.person.speed
-                            level.sword_effect.rect.x += level.person.speed
+                            #level.sword_effect2.rect.x += level.person.speed
                     level.person2.animation()
                     level.weapon2.animation()
                 if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk:
