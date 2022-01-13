@@ -193,6 +193,14 @@ class Lives():
         elif player == 2:
             pass
             pygame.draw.rect(screen, (255, 0, 0), (screen_width//2+16, 8, int(screen_width//2/100*self.lives), 34))
+class NPC(pygame.sprite.Sprite):
+    def __init__(self,person,x,y):
+        super().__init__(all_sprites)
+        if person == 1:
+            self.image = pygame.image.load("data/grandad.png").convert_alpha()
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 class Level():
     def __init__(self, level,player1_person=1,player2_person=0):
         if level == 1:
@@ -214,7 +222,9 @@ class Level():
             x = screen_width // 2 - 250
             y = screen_height - 500
             self.person = LevelObject(player1_person, False, x, y)
-
+            self.weapon = LevelObject(False, player1_person, x, y)
+            x = screen_width-500
+            self.grandad = NPC(1,x,y)
 class MainMenuObject(pygame.sprite.Sprite):
     def __init__(self, value, x=0, y=0):
         super().__init__(all_sprites)
