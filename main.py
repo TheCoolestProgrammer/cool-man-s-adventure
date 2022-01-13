@@ -424,7 +424,7 @@ class Cutsciene():
         screen.blit(self.image, (self.position_x, self.position_y))
         self.counter_tics+=1
         if self.now_frame==-1:
-            text = font.render("это началось внезапно", True, (0, 255, 0))
+            text = font.render("это произошло внезапно", True, (0, 255, 0))
             screen.blit(text, (0, 350))
         if self.now_frame==0:
             text = font.render("я даже не успел опомниться", True, (0, 255, 0))
