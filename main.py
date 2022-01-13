@@ -415,22 +415,28 @@ class Game_over(pygame.sprite.Sprite):
 
 class Cutsciene():
     def __init__(self,level):
-        if level == 4:
-            self.image = pygame.image.load("data/cutsciene1_-1.png")
+
+        if level==1:
+            self.now_frame = -1
+            self.max_value_anim = 11
+            self.tics = fps * 2
+        else:
+            self.now_frame=1
+            self.max_value_anim=3
+            self.tics = fps * 10
+        self.image = pygame.image.load(f"data/cutsciene{level}_{self.now_frame}.png")
         self.image = pygame.Surface.convert_alpha(self.image)
         self.position_x = 0
         self.position_y = 0
-        self.now_frame = -1
         self.counter_tics = 0
-        self.tics = fps*4
-        self.max_value_anim = 11
-        self.super_punch = False
+
+        self.level = level
 
     def animatoon(self):
         if self.counter_tics >= self.tics:
             self.counter_tics = 0
             self.now_frame += 1
-            self.image = pygame.image.load(f"data/cutsciene1_{self.now_frame}.png")
+            self.image = pygame.image.load(f"data/cutsciene{self.level}_{self.now_frame}.png")
         screen.blit(self.image, (self.position_x, self.position_y))
         self.counter_tics+=1
         if self.now_frame==-1:
@@ -465,7 +471,7 @@ while running:
     if game_mode==4:
         menu_running=True
         all_sprites = pygame.sprite.Group()
-        cutscene = Cutsciene(4)
+        cutscene = Cutsciene(1)
         background = Background()
         background.load_background(2)
         level = Level(2)
@@ -476,22 +482,61 @@ while running:
                     running = False
                     menu_running = False
                     game_mode = -1
+                if cutscene.now_frame >= cutscene.max_value_anim:
+                    if not level.person.animation_active or not level.weapon.animation_active:
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == player2[0]:
+                                cutscene = Cutsciene(2)
+                            if event.key == player2[5]:
+                                level.person.look_right = True
+                                level.weapon.look_right = True
+                                level.person.back(level.person.person, False)
+                                level.weapon.back(False, level.weapon.weapon)
+                                level.person.walk = True
+                                level.weapon.walk = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+
+                            elif event.key == player2[6]:
+                                level.person.look_right = False
+                                level.weapon.look_right = False
+                                level.person.back(level.person.person, False)
+                                level.weapon.back(False, level.weapon.weapon)
+                                level.person.walk = True
+                                level.weapon.walk = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                    if event.type == pygame.KEYUP:
+                        if level.person.walk and (event.key == player2[5] or event.key == player2[6]):
+                            level.person.walk = False
+                            level.weapon.walk = False
+                            level.person.animation_active = False
+                            level.weapon.animation_active = False
+                            level.person.back(level.person.person, False)
+                            level.weapon.back(False, level.weapon.weapon)
             screen.fill((0, 0, 0))
+            keys = pygame.key.get_pressed()
             if cutscene.now_frame < cutscene.max_value_anim:
                 cutscene.animatoon()
             else:
+                if cutscene.level==2:
+                    game_mode = 0
+                    menu_running=False
                 if level.person.animation_active:
-                    if level.person.walk or level.person.jump:
+                    if level.person.walk:
                         if keys[player2[6]]:
-                            if level.person.jump:
-                                level.person.rect.x -= level.person.speed+5
-                                level.weapon.rect.x -= level.person.speed+5
-                            else:
-                                level.person.rect.x -= level.person.speed
-                                level.weapon.rect.x -= level.person.speed
+                            level.person.rect.x -= level.person.speed
+                            level.weapon.rect.x -= level.person.speed
+                        if keys[player2[5]]:
+                            level.person.rect.x += level.person.speed
+                            level.weapon.rect.x += level.person.speed
+                        level.person.animation()
+                        level.weapon.animation()
                 background.bliting()
                 all_sprites.draw(screen)
                 all_sprites.update(screen)
+                text = font.render("E", True, (0, 255, 0))
+                screen.blit(text, (screen_width // 2, 350))
             clock.tick(fps)
             pygame.display.update((0, 0, screen_width, screen_height))
             pygame.display.set_caption(str(clock.get_fps()))
