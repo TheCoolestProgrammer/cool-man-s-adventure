@@ -421,8 +421,15 @@ class Cutsciene():
             self.counter_tics = 0
             self.now_frame += 1
             self.image = pygame.image.load(f"data/cutsciene1_{self.now_frame}.png")
-        self.counter_tics+=1
         screen.blit(self.image, (self.position_x, self.position_y))
+        self.counter_tics+=1
+        if self.now_frame==-1:
+            text = font.render("это началось внезапно", True, (0, 255, 0))
+            screen.blit(text, (0, 350))
+        if self.now_frame==0:
+            text = font.render("я даже не успел опомниться", True, (0, 255, 0))
+            screen.blit(text, (0, 450))
+
 
 
 running = True
@@ -461,7 +468,6 @@ while running:
                     game_mode = -1
             screen.fill((0, 0, 0))
             if cutscene.now_frame < cutscene.max_value_anim:
-                print("i`m here")
                 cutscene.animatoon()
             else:
                 if level.person.animation_active:
