@@ -853,7 +853,7 @@ while running:
                                         if menu.active_button == 0:
                                             game_mode=2
                                             menu_running=False
-                                        if menu.active_button == 2:
+                                        if menu.active_button == 1:
                                             game_mode = 0
                                             menu_running = False
                         else:
