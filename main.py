@@ -52,7 +52,7 @@ class LevelObject(pygame.sprite.Sprite):
         self.super_punch = False
         self.jump = False
         self.v_0 = 15
-        self.block= False
+        self.block = False
         self.sitting = False
         all_sprites.add(self)
 
@@ -64,24 +64,27 @@ class LevelObject(pygame.sprite.Sprite):
             if self.person:
                 if self.walk:
                     self.max_value_anim = 5
-                    self.image = pygame.image.load(f"data/person{self.person_number}_walk_anim{self.now_frame % self.max_value_anim + 1}.png")
+                    self.image = pygame.image.load(
+                        f"data/person{self.person_number}_walk_anim{self.now_frame % self.max_value_anim + 1}.png")
                 elif self.normal_weapon_punch:
                     self.max_value_anim = 6
                     self.image = pygame.image.load(f"data/person{self.person_number}.png")
                 elif self.super_punch:
                     self.max_value_anim = 9
-                    self.image = pygame.image.load(f"data/person{self.person_number}_sword_punch{self.now_frame % self.max_value_anim + 1}.png")
-                    if self.person_number== 2:
+                    self.image = pygame.image.load(
+                        f"data/person{self.person_number}_sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    if self.person_number == 2:
                         if self.look_right:
-                            self.rect.x +=90
+                            self.rect.x += 90
                         else:
                             self.rect.x -= 90
                 elif self.jump:
-                    self.max_value_anim=10
-                    self.image = pygame.image.load(f"data/jump_person{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
-                    self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
+                    self.max_value_anim = 10
+                    self.image = pygame.image.load(
+                        f"data/jump_person{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
+                    self.rect.y = self.v_0 * self.now_frame - 5 * (self.now_frame ** 2)
                 elif self.block:
-                    self.max_value_anim+=1
+                    self.max_value_anim += 1
                     self.image = pygame.image.load(f"data/person{self.person_number}.png")
                 elif self.sitting:
                     self.max_value_anim += 1
@@ -92,24 +95,28 @@ class LevelObject(pygame.sprite.Sprite):
 
                 if self.walk:
                     self.max_value_anim = 5
-                    self.image = pygame.image.load(f"data/fists_{self.person_number}_walk_animation{self.now_frame % self.max_value_anim + 1}.png")
+                    self.image = pygame.image.load(
+                        f"data/fists_{self.person_number}_walk_animation{self.now_frame % self.max_value_anim + 1}.png")
                 elif self.normal_weapon_punch:
                     self.max_value_anim = 6
-                    self.image = pygame.image.load(f"data/fists_{self.person_number}_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    self.image = pygame.image.load(
+                        f"data/fists_{self.person_number}_punch{self.now_frame % self.max_value_anim + 1}.png")
                 elif self.super_punch:
                     self.max_value_anim = 9
-                    self.image = pygame.image.load(f"data/{self.person_number}sword_punch{self.now_frame % self.max_value_anim + 1}.png")
-                    if self.person_number== 2:
+                    self.image = pygame.image.load(
+                        f"data/{self.person_number}sword_punch{self.now_frame % self.max_value_anim + 1}.png")
+                    if self.person_number == 2:
                         if self.look_right:
-                            self.rect.x +=90
+                            self.rect.x += 90
                         else:
                             self.rect.x -= 90
                 elif self.jump:
                     self.max_value_anim = 10
-                    self.image = pygame.image.load(f"data/jump_hands{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
-                    self.rect.y = self.v_0*self.now_frame - 5*(self.now_frame**2)
+                    self.image = pygame.image.load(
+                        f"data/jump_hands{self.person_number}_{self.now_frame % self.max_value_anim + 1}.png")
+                    self.rect.y = self.v_0 * self.now_frame - 5 * (self.now_frame ** 2)
                 elif self.block:
-                    self.max_value_anim+=1
+                    self.max_value_anim += 1
                     self.image = pygame.image.load(f"data/block{self.person_number}.png")
                 elif self.sitting:
                     self.max_value_anim += 1
@@ -125,14 +132,15 @@ class LevelObject(pygame.sprite.Sprite):
                     self.super_punch = False
                     self.animation_active = False
                 elif self.jump:
-                    self.jump=False
-                    self.animation_active=False
+                    self.jump = False
+                    self.animation_active = False
                     self.rect.y = screen_height - 500
-                self.back(self.person,self.weapon)
+                self.back(self.person, self.weapon)
             self.mask = pygame.mask.from_surface(self.image)
 
         self.counter_tics += 1
-    def back(self,person,weapon):
+
+    def back(self, person, weapon):
         if self.person:
             if self.person_number == 1:
                 self.image = pygame.image.load("data/person1.png")
@@ -143,18 +151,20 @@ class LevelObject(pygame.sprite.Sprite):
         elif self.weapon:
             if self.person_number == 1:
                 self.image = pygame.image.load("data/fists1.png")
-            elif self.person_number== 2:
+            elif self.person_number == 2:
                 self.image = pygame.image.load("data/fists2.png")
             if not self.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
         self.mask = pygame.mask.from_surface(self.image)
-        self.now_frame=0
-        self.counter_tics=0
-        self.max_value_anim=5
+        self.now_frame = 0
+        self.counter_tics = 0
+        self.max_value_anim = 5
+
+
 class Effect(pygame.sprite.Sprite):
-    def __init__(self,effect,x,y):
+    def __init__(self, effect, x, y):
         super().__init__(effects)
-        self.animation_active=False
+        self.animation_active = False
         if effect == 1:
             self.image = pygame.image.load(f"data/sword_effects1.png")
             self.rect = self.image.get_rect()
@@ -174,35 +184,43 @@ class Effect(pygame.sprite.Sprite):
             self.image = pygame.image.load(f"data/sword_effects{self.now_frame % self.max_value_anim + 1}.png")
             if not level.person.look_right:
                 self.image = pygame.transform.flip(self.image, True, False)
-        if self.now_frame==self.max_value_anim:
+        if self.now_frame == self.max_value_anim:
             self.animation_active = False
-            self.now_frame=0
-            self.counter_tics=0
-        self.counter_tics+=1
+            self.now_frame = 0
+            self.counter_tics = 0
+        self.counter_tics += 1
+
+
 class Lives():
-    def __init__(self,x=0, y=0):
+    def __init__(self, x=0, y=0):
         self.image = pygame.image.load(f"data/health_bar.png")
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
         self.lives = 100
-    def blitting(self,player):
+
+    def blitting(self, player):
         screen.blit(self.image, (self.rect.x, self.rect.y))
         if player == 1:
-            pygame.draw.rect(screen,(255,0,0),(8,8,int(screen_width//2/100*self.lives),34))
+            pygame.draw.rect(screen, (255, 0, 0), (8, 8, int(screen_width // 2 / 100 * self.lives), 34))
         elif player == 2:
             pass
-            pygame.draw.rect(screen, (255, 0, 0), (screen_width//2+16, 8, int(screen_width//2/100*self.lives), 34))
+            pygame.draw.rect(screen, (255, 0, 0),
+                             (screen_width // 2 + 16, 8, int(screen_width // 2 / 100 * self.lives), 34))
+
+
 class NPC(pygame.sprite.Sprite):
-    def __init__(self,person,x,y):
+    def __init__(self, person, x, y):
         super().__init__(all_sprites)
         if person == 1:
             self.image = pygame.image.load("data/grandad.png").convert_alpha()
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+
 class Level():
-    def __init__(self, level,player1_person=1,player2_person=0):
+    def __init__(self, level, player1_person=1, player2_person=0):
         if level == 1:
             x = screen_width // 2 - 250
             y = screen_height - 500
@@ -211,25 +229,27 @@ class Level():
             self.weapon = LevelObject(False, player1_person, x, y)
             # if player1_person==1:
             #     self.sword_effect = Effect(1,x,y)
-            self.health_bar_player1 = Lives(0,0)
-
-            self.person2 = LevelObject(player2_person, False, screen_width-x, y)
-            self.weapon2= LevelObject(False, player2_person, screen_width-x, y)
-            #self.sword_effect2 = Effect(1, screen_width-x, y)
             self.health_bar_player1 = Lives(0, 0)
-            self.health_bar_player2 = Lives(screen_width//2,0)
+
+            self.person2 = LevelObject(player2_person, False, screen_width - x, y)
+            self.weapon2 = LevelObject(False, player2_person, screen_width - x, y)
+            # self.sword_effect2 = Effect(1, screen_width-x, y)
+            self.health_bar_player1 = Lives(0, 0)
+            self.health_bar_player2 = Lives(screen_width // 2, 0)
         elif level == 2:
             x = screen_width // 2 - 250
             y = screen_height - 500
             self.person = LevelObject(player1_person, False, x, y)
             self.weapon = LevelObject(False, player1_person, x, y)
-            x = screen_width-500
-            self.grandad = NPC(1,x,y)
+            x = screen_width - 500
+            self.grandad = NPC(1, x, y)
+
+
 class MainMenuObject(pygame.sprite.Sprite):
     def __init__(self, value, x=0, y=0):
         super().__init__(all_sprites)
 
-        if value == 0 or value == 4 or value == 5or value == 6:
+        if value == 0 or value == 4 or value == 5 or value == 6:
             self.image = pygame.image.load("data/menu_button.png")
         elif value == 1:
             self.image = pygame.image.load("data/menu_button_up_down.png")
@@ -273,13 +293,14 @@ class MainMenuObject(pygame.sprite.Sprite):
                     self.rect.y = menu.button.rect.y - 20 - self.image.get_height()
                 elif value == 2:
                     self.rect.x = screen_width // 2 - (self.image.get_width() // 2)
-                    self.rect.y = screen_height//2+(screen_height//2 -menu.button.rect.y) + 20 + self.image.get_height()
+                    self.rect.y = screen_height // 2 + (
+                                screen_height // 2 - menu.button.rect.y) + 20 + self.image.get_height()
             elif menu.slide == 2:
 
                 if value == 1:
-                    self.image = pygame.transform.rotate(self.image,90)
+                    self.image = pygame.transform.rotate(self.image, 90)
                 elif value == 2:
-                    self.image = pygame.transform.rotate(self.image,90)
+                    self.image = pygame.transform.rotate(self.image, 90)
                 self.rect = self.image.get_rect()
                 self.rect.x = x
                 self.rect.y = y
@@ -316,16 +337,17 @@ class Main_menu():
         elif self.slide == 2:
             self.background = pygame.image.load("data/menu_background2.png")
             self.background = pygame.Surface.convert_alpha(self.background)
-            self.button_left_1 = MainMenuObject(1,20,screen_height-150)
-            self.button_right_1 = MainMenuObject(2,80, screen_height-150)
-            self.button_left_2 = MainMenuObject(1,screen_width-130,screen_height-150)
-            self.button_right_2 = MainMenuObject(2,screen_width-70,screen_height-150)
-            self.button = MainMenuObject(0,screen_width//2-320,screen_height-100)
+            self.button_left_1 = MainMenuObject(1, 20, screen_height - 150)
+            self.button_right_1 = MainMenuObject(2, 80, screen_height - 150)
+            self.button_left_2 = MainMenuObject(1, screen_width - 130, screen_height - 150)
+            self.button_right_2 = MainMenuObject(2, screen_width - 70, screen_height - 150)
+            self.button = MainMenuObject(0, screen_width // 2 - 320, screen_height - 100)
             self.active_button = 0
             self.animation_active = False
             self.now_frame = 1
             self.counter_tics = 0
             self.tics = fps / 12
+
     def bliting(self):
 
         screen.blit(self.background, (0, 0))
@@ -337,8 +359,6 @@ class Main_menu():
             elif self.active_button == 1:
                 text = font.render("SINGLEPLAYER", True, (0, 255, 0))
             elif self.active_button == 2:
-                text = font.render("OPTIONS", True, (0, 255, 0))
-            elif self.active_button == 3:
                 text = font.render("EXIT", True, (0, 255, 0))
             screen.blit(text, (screen_width // 8 * 3, 520))
         elif self.slide == 1:
@@ -346,30 +366,30 @@ class Main_menu():
                 text = font.render("LOCAL", True, (0, 255, 0))
             elif self.active_button == 1:
                 text = font.render("EXIT", True, (0, 255, 0))
-            screen.blit(text, (menu.button.rect.x+menu.button.rect.x//8*6,menu.button.rect.y))
+            screen.blit(text, (menu.button.rect.x + menu.button.rect.x // 8 * 6, menu.button.rect.y))
         else:
             image = pygame.image.load(f"data/shadow.png")
             screen.blit(image, (0, 0))
             screen.blit(image, (screen_width - 400, 0))
-            image = pygame.image.load(f"data/person{hero%heroes_list_len+1}.png")
-            screen.blit(image,(0,0))
+            image = pygame.image.load(f"data/person{hero % heroes_list_len + 1}.png")
+            screen.blit(image, (0, 0))
 
-            image=  pygame.image.load(f"data/fists{hero%heroes_list_len+1}.png")
-            screen.blit(image,(0,0))
+            image = pygame.image.load(f"data/fists{hero % heroes_list_len + 1}.png")
+            screen.blit(image, (0, 0))
 
             image = pygame.image.load(f"data/person{hero2 % heroes_list_len + 1}.png")
             image = pygame.transform.flip(image, True, False)
-            screen.blit(image, (screen_width-400, 0))
+            screen.blit(image, (screen_width - 400, 0))
 
-            image = pygame.image.load(f"data/fists{hero2%heroes_list_len+1}.png")
-            image = pygame.transform.flip(image,True,False)
-            screen.blit(image, (screen_width-400, 0))
+            image = pygame.image.load(f"data/fists{hero2 % heroes_list_len + 1}.png")
+            image = pygame.transform.flip(image, True, False)
+            screen.blit(image, (screen_width - 400, 0))
             text = font.render("ACCEPT", True, (0, 255, 0))
-            screen.blit(text, (menu.button.rect.x+menu.button.rect.x//2, menu.button.rect.y))
+            screen.blit(text, (menu.button.rect.x + menu.button.rect.x // 2, menu.button.rect.y))
         self.animation_up = False
 
     def animation(self):
-        if self.slide == 0 or self.slide==1:
+        if self.slide == 0 or self.slide == 1:
             if self.animation_active:
                 if self.counter_tics == 0:
                     if self.animation_up:
@@ -392,12 +412,13 @@ class Main_menu():
                     self.counter_tics = 0
                     self.animation_up = False
 
+
 class Game_over(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__(game_overs)
         self.tics = fps // 5
         self.max_value_anim = 12
-        self.now_frame=1
+        self.now_frame = 1
         self.counter_ticks = 0
         self.image = pygame.image.load(f"data/game_over{self.now_frame}.png")
 
@@ -405,24 +426,26 @@ class Game_over(pygame.sprite.Sprite):
         self.rect.x = 0
         self.rect.y = 0
         game_overs.add(self)
+
     def animation(self):
-        if self.now_frame<self.max_value_anim:
-            if self.counter_ticks ==self.tics:
-                self.counter_ticks=0
-                self.now_frame+=1
+        if self.now_frame < self.max_value_anim:
+            if self.counter_ticks == self.tics:
+                self.counter_ticks = 0
+                self.now_frame += 1
                 self.image = pygame.image.load(f"data/game_over{self.now_frame}.png")
-            self.counter_ticks+=1
+            self.counter_ticks += 1
+
 
 class Cutsciene():
-    def __init__(self,level):
+    def __init__(self, level):
 
-        if level==1:
+        if level == 1:
             self.now_frame = -1
             self.max_value_anim = 11
             self.tics = fps * 2
         else:
-            self.now_frame=1
-            self.max_value_anim=3
+            self.now_frame = 1
+            self.max_value_anim = 3
             self.tics = fps * 10
         self.image = pygame.image.load(f"data/cutsciene{level}_{self.now_frame}.png")
         self.image = pygame.Surface.convert_alpha(self.image)
@@ -438,14 +461,13 @@ class Cutsciene():
             self.now_frame += 1
             self.image = pygame.image.load(f"data/cutsciene{self.level}_{self.now_frame}.png")
         screen.blit(self.image, (self.position_x, self.position_y))
-        self.counter_tics+=1
-        if self.now_frame==-1:
+        self.counter_tics += 1
+        if self.now_frame == -1:
             text = font.render("это произошло внезапно", True, (0, 255, 0))
             screen.blit(text, (0, 350))
-        if self.now_frame==0:
+        if self.now_frame == 0:
             text = font.render("я даже не успел опомниться", True, (0, 255, 0))
             screen.blit(text, (0, 450))
-
 
 
 running = True
@@ -465,11 +487,11 @@ game_mode = 0
 # player2 = a[1].strip().split(", ")
 # print(player1,player2)
 player1 = [pygame.K_u, pygame.K_h, pygame.K_k, pygame.K_i, pygame.K_o, pygame.K_l,
-                                       pygame.K_j]
-player2 = [pygame.K_e,pygame.K_f,pygame.K_s,pygame.K_SPACE,pygame.K_q,pygame.K_d,pygame.K_a]
+           pygame.K_j]
+player2 = [pygame.K_e, pygame.K_f, pygame.K_s, pygame.K_SPACE, pygame.K_q, pygame.K_d, pygame.K_a]
 while running:
-    if game_mode==4:
-        menu_running=True
+    if game_mode == 4:
+        menu_running = True
         all_sprites = pygame.sprite.Group()
         cutscene = Cutsciene(1)
         background = Background()
@@ -519,9 +541,9 @@ while running:
             if cutscene.now_frame < cutscene.max_value_anim:
                 cutscene.animatoon()
             else:
-                if cutscene.level==2:
+                if cutscene.level == 2:
                     game_mode = 0
-                    menu_running=False
+                    menu_running = False
                 if level.person.animation_active:
                     if level.person.walk:
                         if keys[player2[6]]:
@@ -548,7 +570,7 @@ while running:
         game_over = Game_over()
         background = Background()
         background.load_background(0)
-        level = Level(1,hero%heroes_list_len+1,hero2%heroes_list_len+1)
+        level = Level(1, hero % heroes_list_len + 1, hero2 % heroes_list_len + 1)
         game_runnung = True
         winner = False
 
@@ -558,7 +580,7 @@ while running:
                     if event.type == pygame.QUIT:
                         running = False
                         game_mode = -1
-                        game_runnung=False
+                        game_runnung = False
                     if not level.person2.animation_active or not level.weapon2.animation_active:
                         if event.type == pygame.KEYDOWN:
                             if event.key == player1[0]:
@@ -634,8 +656,8 @@ while running:
                                 level.weapon.jump = True
 
                             if event.key == player2[4]:
-                                level.person.super_punch=True
-                                level.weapon.super_punch=True
+                                level.person.super_punch = True
+                                level.weapon.super_punch = True
                                 level.person.animation_active = True
                                 level.weapon.animation_active = True
                                 # level.sword_effect.animation_active=True
@@ -676,14 +698,14 @@ while running:
                             level.weapon2.back(False, level.weapon2.weapon)
                         if level.person.sitting and event.key == player2[2]:
                             level.person.sitting = False
-                            level.weapon.sitting= False
+                            level.weapon.sitting = False
                             level.person.animation_active = False
                             level.weapon.animation_active = False
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
                         if level.person2.sitting and event.key == player1[2]:
                             level.person2.sitting = False
-                            level.weapon2.sitting= False
+                            level.weapon2.sitting = False
                             level.person2.animation_active = False
                             level.weapon2.animation_active = False
                             level.person2.back(level.person2.person, False)
@@ -693,15 +715,15 @@ while running:
                             level.weapon.block = False
                             level.person.animation_active = False
                             level.weapon.animation_active = False
-                            level.person.back(level.person.person,False)
-                            level.weapon.back(False,level.weapon.weapon)
+                            level.person.back(level.person.person, False)
+                            level.weapon.back(False, level.weapon.weapon)
                         if event.key == player1[1] and level.person2.block:
                             level.person2.block = False
                             level.weapon2.block = False
                             level.person2.animation_active = False
                             level.weapon2.animation_active = False
-                            level.person2.back(level.person2.person,False)
-                            level.weapon2.back(False,level.weapon2.weapon)
+                            level.person2.back(level.person2.person, False)
+                            level.weapon2.back(False, level.weapon2.weapon)
                 keys = pygame.key.get_pressed()
 
                 if level.person.animation_active:
@@ -712,8 +734,8 @@ while running:
                                     level.person.rect.x -= level.person.speed + 20
                                     level.weapon.rect.x -= level.person.speed + 20
                                 else:
-                                    level.person.rect.x -= level.person.speed+5
-                                    level.weapon.rect.x -= level.person.speed+5
+                                    level.person.rect.x -= level.person.speed + 5
+                                    level.weapon.rect.x -= level.person.speed + 5
                                     # level.sword_effect.rect.x -= level.person.speed+5
                             else:
                                 if level.person.person_number == 2:
@@ -761,7 +783,7 @@ while running:
                                     level.person2.rect.x -= level.person2.speed
                                     level.weapon2.rect.x -= level.person2.speed
                                     # level.sword_effect.rect.x -= level.person2.speed
-                                    #level.sword_effect2.rect.x -= level.person.speed
+                                    # level.sword_effect2.rect.x -= level.person.speed
                         elif keys[player1[5]]:
                             if level.person2.jump:
                                 if level.person2.person_number == 2:
@@ -781,24 +803,26 @@ while running:
                                     # level.sword_effect.rect.x += level.person2.speed
                     level.person2.animation()
                     level.weapon2.animation()
-                if pygame.sprite.collide_mask(level.person, level.weapon2) and level.weapon2.animation_active and not level.person2.walk and not level.person2.sitting:
+                if pygame.sprite.collide_mask(level.person,
+                                              level.weapon2) and level.weapon2.animation_active and not level.person2.walk and not level.person2.sitting:
                     if level.person.block:
                         level.health_bar_player1.lives -= 1
                     else:
-                        level.health_bar_player1.lives-=2
-                elif pygame.sprite.collide_mask(level.person2, level.weapon) and level.weapon.animation_active and not level.person.walk and not level.person.sitting:
+                        level.health_bar_player1.lives -= 2
+                elif pygame.sprite.collide_mask(level.person2,
+                                                level.weapon) and level.weapon.animation_active and not level.person.walk and not level.person.sitting:
                     if level.person2.block:
                         level.health_bar_player2.lives -= 1
                     else:
                         level.health_bar_player2.lives -= 2
-                if level.health_bar_player2.lives<=0:
+                if level.health_bar_player2.lives <= 0:
                     winner = "player 1"
-                elif level.health_bar_player1.lives<=0:
+                elif level.health_bar_player1.lives <= 0:
                     winner = "player 2"
                 if winner:
                     all_sprites = pygame.sprite.Group()
                     if winner == "player 1":
-                        scores = level.health_bar_player1.lives*100
+                        scores = level.health_bar_player1.lives * 100
                     else:
                         scores = level.health_bar_player2.lives * 100
                     button1 = MainMenuObject(4)
@@ -819,27 +843,27 @@ while running:
                     if event.type == pygame.QUIT:
                         running = False
                         game_mode = -1
-                        game_runnung=False
-                    if event.type==pygame.MOUSEBUTTONDOWN:
-                        if event.button ==1:
+                        game_runnung = False
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if event.button == 1:
                             x, y = pygame.mouse.get_pos()
                             mouse = MainMenuObject(-1, x, y)
                             if pygame.sprite.collide_mask(button1, mouse):
                                 game_mode = 0
-                                game_runnung=False
+                                game_runnung = False
                             if pygame.sprite.collide_mask(button2, mouse):
                                 game_mode = 2
-                                game_runnung=False
+                                game_runnung = False
                             if pygame.sprite.collide_mask(button3, mouse):
                                 text = font.render(f"write your name in console", True, (0, 255, 0))
                                 screen.blit(text, (0, 650))
                                 pygame.display.update((0, 0, screen_width, screen_height))
                                 name = input()
-                                a = open("data/scores.txt",mode="a",encoding="UTF-8")
-                                a.write("\n"+name+": "+str(scores))
+                                a = open("data/scores.txt", mode="a", encoding="UTF-8")
+                                a.write("\n" + name + ": " + str(scores))
                 game_overs.draw(screen)
                 game_over.animation()
-                if game_over.now_frame >=12:
+                if game_over.now_frame >= 12:
                     all_sprites.draw(screen)
                     all_sprites.update(screen)
                     text = font.render("escape in menu", True, (0, 255, 0))
@@ -858,28 +882,28 @@ while running:
             pygame.display.update((0, 0, screen_width, screen_height))
             clock.tick(fps)
             pygame.display.set_caption(str(clock.get_fps()))
-    elif game_mode== 0 or game_mode==1 or game_mode==2:
+    elif game_mode == 0 or game_mode == 1 or game_mode == 2:
         all_sprites = pygame.sprite.Group()
         menu = Main_menu()
         menu.load_image(game_mode)
         menu_running = True
         if game_mode == 0:
-            buttons_count = 4
+            buttons_count = 3
         elif game_mode == 1:
-            buttons_count=2
+            buttons_count = 2
         else:
-            buttons_count=1
+            buttons_count = 1
         while menu_running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                    menu_running=False
+                    menu_running = False
                     game_mode = -1
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         x, y = pygame.mouse.get_pos()
                         mouse = MainMenuObject(-1, x, y)
-                        if game_mode<2:
+                        if game_mode < 2:
                             if not menu.animation_active:
                                 if pygame.sprite.collide_mask(menu.button_up, mouse):
                                     menu.active_button -= 1
@@ -892,37 +916,37 @@ while running:
                                     menu.animation_active = True
                                     menu.animation_up = False
                                 elif pygame.sprite.collide_mask(menu.button, mouse):
-                                    if game_mode==0:
-                                        if menu.active_button==0:
+                                    if game_mode == 0:
+                                        if menu.active_button == 0:
                                             game_mode = 1
-                                            menu_running= False
-                                        elif menu.active_button==1:
+                                            menu_running = False
+                                        elif menu.active_button == 1:
                                             game_mode = 4
-                                            menu_running= False
+                                            menu_running = False
 
-                                        elif menu.active_button==3:
+                                        elif menu.active_button == 2:
                                             game_mode = -1
-                                            menu_running= False
+                                            menu_running = False
                                             running = False
                                     else:
                                         if menu.active_button == 0:
-                                            game_mode=2
-                                            menu_running=False
+                                            game_mode = 2
+                                            menu_running = False
                                         if menu.active_button == 1:
                                             game_mode = 0
                                             menu_running = False
                         else:
                             if pygame.sprite.collide_mask(menu.button_left_1, mouse):
-                                hero-=1
+                                hero -= 1
                             elif pygame.sprite.collide_mask(menu.button_right_1, mouse):
-                                hero+=1
+                                hero += 1
                             if pygame.sprite.collide_mask(menu.button_left_2, mouse):
-                                hero2-=1
+                                hero2 -= 1
                             elif pygame.sprite.collide_mask(menu.button_right_2, mouse):
-                                hero2+=1
+                                hero2 += 1
                             elif pygame.sprite.collide_mask(menu.button, mouse):
-                                menu_running=False
-                                game_mode=3
+                                menu_running = False
+                                game_mode = 3
             if menu.animation_active:
                 menu.animation()
             menu.bliting()
