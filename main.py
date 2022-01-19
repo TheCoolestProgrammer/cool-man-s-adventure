@@ -20,7 +20,7 @@ class Background():
 
 
 class LevelObject(pygame.sprite.Sprite):
-    def __init__(self, person, weapon, x=0, y=0):
+    def __init__(self, person, weapon, x=0, y=0,enemy=False):
         super().__init__(all_sprites)
         self.person = False
         self.weapon = False
@@ -41,6 +41,10 @@ class LevelObject(pygame.sprite.Sprite):
             self.rect = self.image.get_rect()
             self.weapon = True
             self.person_number = weapon
+        if enemy:
+           self.enemy = enemy
+        else:
+            self.enemy=False
         self.walk = False
         self.animation_active = False
         self.rect.x = x
@@ -246,7 +250,14 @@ class Level():
             self.weapon = LevelObject(False, player1_person, x, y)
             x = screen_width - 500
             self.grandad = NPC(1, x, y)
-
+        elif level == 3:
+            x = screen_width // 2 - 250
+            y = screen_height - 500
+            self.person = LevelObject(player1_person, False, x, y)
+            self.weapon = LevelObject(False, player1_person, x, y)
+            x = screen_width - 500
+            self.enemy = LevelObject(player2_person,False,x,y,True)
+            self.enemy = LevelObject(False,player2_person,x,y,True)
 
 class MainMenuObject(pygame.sprite.Sprite):
     def __init__(self, value, x=0, y=0):
@@ -506,10 +517,9 @@ while running:
     if game_mode == 5:
         menu_running = True
         all_sprites = pygame.sprite.Group()
-        cutscene = Cutsciene(1)
         background = Background()
         background.load_background(3)
-        level = Level(2)
+        level = Level(3,1,2)
 
         while menu_running:
             for event in pygame.event.get():
@@ -517,38 +527,37 @@ while running:
                     running = False
                     menu_running = False
                     game_mode = -1
-                if cutscene.now_frame >= cutscene.max_value_anim:
-                    if not level.person.animation_active or not level.weapon.animation_active:
-                        if event.type == pygame.KEYDOWN:
-                            if event.key == player2[0]:
-                                cutscene = Cutsciene(2)
-                            if event.key == player2[5]:
-                                level.person.look_right = True
-                                level.weapon.look_right = True
-                                level.person.back(level.person.person, False)
-                                level.weapon.back(False, level.weapon.weapon)
-                                level.person.walk = True
-                                level.weapon.walk = True
-                                level.person.animation_active = True
-                                level.weapon.animation_active = True
-
-                            elif event.key == player2[6]:
-                                level.person.look_right = False
-                                level.weapon.look_right = False
-                                level.person.back(level.person.person, False)
-                                level.weapon.back(False, level.weapon.weapon)
-                                level.person.walk = True
-                                level.weapon.walk = True
-                                level.person.animation_active = True
-                                level.weapon.animation_active = True
-                    if event.type == pygame.KEYUP:
-                        if level.person.walk and (event.key == player2[5] or event.key == player2[6]):
-                            level.person.walk = False
-                            level.weapon.walk = False
-                            level.person.animation_active = False
-                            level.weapon.animation_active = False
+                if not level.person.animation_active or not level.weapon.animation_active:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == player2[0]:
+                            cutscene = Cutsciene(2)
+                        if event.key == player2[5]:
+                            level.person.look_right = True
+                            level.weapon.look_right = True
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
+                            level.person.walk = True
+                            level.weapon.walk = True
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+
+                        elif event.key == player2[6]:
+                            level.person.look_right = False
+                            level.weapon.look_right = False
+                            level.person.back(level.person.person, False)
+                            level.weapon.back(False, level.weapon.weapon)
+                            level.person.walk = True
+                            level.weapon.walk = True
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+                if event.type == pygame.KEYUP:
+                    if level.person.walk and (event.key == player2[5] or event.key == player2[6]):
+                        level.person.walk = False
+                        level.weapon.walk = False
+                        level.person.animation_active = False
+                        level.weapon.animation_active = False
+                        level.person.back(level.person.person, False)
+                        level.weapon.back(False, level.weapon.weapon)
             screen.fill((0, 0, 0))
             keys = pygame.key.get_pressed()
             if level.person.animation_active:
@@ -564,8 +573,6 @@ while running:
             background.bliting()
             all_sprites.draw(screen)
             all_sprites.update(screen)
-            text = font.render("E", True, (0, 255, 0))
-            screen.blit(text, (screen_width // 2, 350))
             clock.tick(fps)
             pygame.display.update((0, 0, screen_width, screen_height))
             pygame.display.set_caption(str(clock.get_fps()))
