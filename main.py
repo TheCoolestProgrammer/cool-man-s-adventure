@@ -456,11 +456,11 @@ class Cutsciene():
         if level == 1:
             self.now_frame = -1
             self.max_value_anim = 11
-            self.tics = fps // 2
+            self.tics = fps * 2
         elif level==2:
             self.now_frame = 1
             self.max_value_anim = 13
-            self.tics = fps // 10
+            self.tics = fps *8
         self.image = pygame.image.load(f"data/cutsciene{level}_{self.now_frame}.png")
         self.image = pygame.Surface.convert_alpha(self.image)
         self.position_x = 0
@@ -528,9 +528,39 @@ while running:
                     menu_running = False
                     game_mode = -1
                 if not level.person.animation_active or not level.weapon.animation_active:
+
                     if event.type == pygame.KEYDOWN:
                         if event.key == player2[0]:
-                            cutscene = Cutsciene(2)
+                            level.person.normal_weapon_punch = True
+                            level.weapon.normal_weapon_punch = True
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+
+                        if event.key == player2[1]:
+                            level.person.block = True
+                            level.weapon.block = True
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+
+                        if event.key == player2[2]:
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+                            level.person.sitting = True
+                            level.weapon.sitting = True
+
+                        if event.key == player2[3]:
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+                            level.person.jump = True
+                            level.weapon.jump = True
+
+                        if event.key == player2[4]:
+                            level.person.super_punch = True
+                            level.weapon.super_punch = True
+                            level.person.animation_active = True
+                            level.weapon.animation_active = True
+                            # level.sword_effect.animation_active=True
+
                         if event.key == player2[5]:
                             level.person.look_right = True
                             level.weapon.look_right = True
@@ -558,18 +588,35 @@ while running:
                         level.weapon.animation_active = False
                         level.person.back(level.person.person, False)
                         level.weapon.back(False, level.weapon.weapon)
+
+                    if level.person.sitting and event.key == player2[2]:
+                        level.person.sitting = False
+                        level.weapon.sitting = False
+                        level.person.animation_active = False
+                        level.weapon.animation_active = False
+                        level.person.back(level.person.person, False)
+                        level.weapon.back(False, level.weapon.weapon)
+
+                    if event.key == player2[1] and level.person.block:
+                        level.person.block = False
+                        level.weapon.block = False
+                        level.person.animation_active = False
+                        level.weapon.animation_active = False
+                        level.person.back(level.person.person, False)
+                        level.weapon.back(False, level.weapon.weapon)
+
             screen.fill((0, 0, 0))
             keys = pygame.key.get_pressed()
             if level.person.animation_active:
-                if level.person.walk:
+                if level.person.walk or level.person.jump:
                     if keys[player2[6]]:
                         level.person.rect.x -= level.person.speed
                         level.weapon.rect.x -= level.person.speed
                     if keys[player2[5]]:
                         level.person.rect.x += level.person.speed
                         level.weapon.rect.x += level.person.speed
-                    level.person.animation()
-                    level.weapon.animation()
+                level.person.animation()
+                level.weapon.animation()
             background.bliting()
             all_sprites.draw(screen)
             all_sprites.update(screen)
