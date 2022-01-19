@@ -524,6 +524,9 @@ while running:
         background.load_background(3)
         level = Level(3,1,2)
         winner=False
+        left_border = Border(5, 5, 5, screen_height - 5)
+        right_border = Border(screen_width - 5, 5, screen_width - 5, screen_height - 5)
+
         while menu_running:
             if not winner:
                 for event in pygame.event.get():
@@ -684,11 +687,13 @@ while running:
                 if level.person.animation_active:
                     if level.person.walk or level.person.jump:
                         if keys[player2[6]]:
-                            level.person.rect.x -= level.person.speed
-                            level.weapon.rect.x -= level.person.speed
+                            if not pygame.sprite.collide_mask(level.person, left_border):
+                                level.person.rect.x -= level.person.speed
+                                level.weapon.rect.x -= level.person.speed
                         if keys[player2[5]]:
-                            level.person.rect.x += level.person.speed
-                            level.weapon.rect.x += level.person.speed
+                            if not pygame.sprite.collide_mask(level.person, right_border):
+                                level.person.rect.x += level.person.speed
+                                level.weapon.rect.x += level.person.speed
                     level.person.animation()
                     level.weapon.animation()
                 if pygame.sprite.collide_mask(level.enemy, level.weapon) and level.weapon.animation_active and not level.person.walk and not level.person.sitting:
@@ -706,9 +711,8 @@ while running:
             else:
                 for event in pygame.event.get():
                     if event.type == pygame.QUIT or event.type ==pygame.KEYDOWN:
-                        running = False
                         menu_running = False
-                        game_mode = -1
+                        game_mode = 0
                 text = font.render("демо версия закончена", True, (0, 255, 0))
                 screen.blit(text, (0, 0))
                 text = font.render(
