@@ -443,9 +443,9 @@ class Cutsciene():
             self.now_frame = -1
             self.max_value_anim = 11
             self.tics = fps * 2
-        else:
+        elif level==2:
             self.now_frame = 1
-            self.max_value_anim = 3
+            self.max_value_anim = 13
             self.tics = fps * 10
         self.image = pygame.image.load(f"data/cutsciene{level}_{self.now_frame}.png")
         self.image = pygame.Surface.convert_alpha(self.image)
@@ -549,6 +549,10 @@ while running:
             screen.fill((0, 0, 0))
             keys = pygame.key.get_pressed()
             if cutscene.now_frame < cutscene.max_value_anim:
+                if cutscene.level==2 and cutscene.now_frame==2:
+                    cutscene.tics = fps*2
+                if cutscene.level==2 and cutscene.now_frame==11:
+                    cutscene.tics = fps * 10
                 cutscene.animatoon()
             else:
                 if cutscene.level == 2:
