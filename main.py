@@ -1,5 +1,5 @@
 import pygame
-
+import random
 
 class Background():
     def load_background(self, level):
@@ -61,6 +61,7 @@ class LevelObject(pygame.sprite.Sprite):
         self.v_0 = 15
         self.block = False
         self.sitting = False
+        self.enemy_action = False
         all_sprites.add(self)
 
     def animation(self):
@@ -257,7 +258,9 @@ class Level():
             self.weapon = LevelObject(False, player1_person, x, y)
             x = screen_width - 500
             self.enemy = LevelObject(player2_person,False,x,y,True)
-            self.enemy = LevelObject(False,player2_person,x,y,True)
+            self.enemy_weapon = LevelObject(False,player2_person,x,y,True)
+            self.health_bar_player = Lives(0,0)
+            self.health_bar_player2 = Lives(screen_width // 2, 0)
 
 class MainMenuObject(pygame.sprite.Sprite):
     def __init__(self, value, x=0, y=0):
@@ -520,106 +523,207 @@ while running:
         background = Background()
         background.load_background(3)
         level = Level(3,1,2)
-
+        winner=False
         while menu_running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False
-                    menu_running = False
-                    game_mode = -1
-                if not level.person.animation_active or not level.weapon.animation_active:
+            if not winner:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        running = False
+                        menu_running = False
+                        game_mode = -1
+                    if not level.person.animation_active or not level.weapon.animation_active:
 
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == player2[0]:
-                            level.person.normal_weapon_punch = True
-                            level.weapon.normal_weapon_punch = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == player2[0]:
+                                level.person.normal_weapon_punch = True
+                                level.weapon.normal_weapon_punch = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
 
-                        if event.key == player2[1]:
-                            level.person.block = True
-                            level.weapon.block = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
+                            if event.key == player2[1]:
+                                level.person.block = True
+                                level.weapon.block = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
 
-                        if event.key == player2[2]:
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                            level.person.sitting = True
-                            level.weapon.sitting = True
+                            if event.key == player2[2]:
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                                level.person.sitting = True
+                                level.weapon.sitting = True
 
-                        if event.key == player2[3]:
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                            level.person.jump = True
-                            level.weapon.jump = True
+                            if event.key == player2[3]:
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                                level.person.jump = True
+                                level.weapon.jump = True
 
-                        if event.key == player2[4]:
-                            level.person.super_punch = True
-                            level.weapon.super_punch = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                            # level.sword_effect.animation_active=True
+                            if event.key == player2[4]:
+                                level.person.super_punch = True
+                                level.weapon.super_punch = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                                # level.sword_effect.animation_active=True
 
-                        if event.key == player2[5]:
-                            level.person.look_right = True
-                            level.weapon.look_right = True
+                            if event.key == player2[5]:
+                                level.person.look_right = True
+                                level.weapon.look_right = True
+                                level.person.back(level.person.person, False)
+                                level.weapon.back(False, level.weapon.weapon)
+                                level.person.walk = True
+                                level.weapon.walk = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+
+                            elif event.key == player2[6]:
+                                level.person.look_right = False
+                                level.weapon.look_right = False
+                                level.person.back(level.person.person, False)
+                                level.weapon.back(False, level.weapon.weapon)
+                                level.person.walk = True
+                                level.weapon.walk = True
+                                level.person.animation_active = True
+                                level.weapon.animation_active = True
+                    if event.type == pygame.KEYUP:
+                        if level.person.walk and (event.key == player2[5] or event.key == player2[6]):
+                            level.person.walk = False
+                            level.weapon.walk = False
+                            level.person.animation_active = False
+                            level.weapon.animation_active = False
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
-                            level.person.walk = True
-                            level.weapon.walk = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
 
-                        elif event.key == player2[6]:
-                            level.person.look_right = False
-                            level.weapon.look_right = False
+                        if level.person.sitting and event.key == player2[2]:
+                            level.person.sitting = False
+                            level.weapon.sitting = False
+                            level.person.animation_active = False
+                            level.weapon.animation_active = False
                             level.person.back(level.person.person, False)
                             level.weapon.back(False, level.weapon.weapon)
-                            level.person.walk = True
-                            level.weapon.walk = True
-                            level.person.animation_active = True
-                            level.weapon.animation_active = True
-                if event.type == pygame.KEYUP:
-                    if level.person.walk and (event.key == player2[5] or event.key == player2[6]):
-                        level.person.walk = False
-                        level.weapon.walk = False
-                        level.person.animation_active = False
-                        level.weapon.animation_active = False
-                        level.person.back(level.person.person, False)
-                        level.weapon.back(False, level.weapon.weapon)
 
-                    if level.person.sitting and event.key == player2[2]:
-                        level.person.sitting = False
-                        level.weapon.sitting = False
-                        level.person.animation_active = False
-                        level.weapon.animation_active = False
-                        level.person.back(level.person.person, False)
-                        level.weapon.back(False, level.weapon.weapon)
+                        if event.key == player2[1] and level.person.block:
+                            level.person.block = False
+                            level.weapon.block = False
+                            level.person.animation_active = False
+                            level.weapon.animation_active = False
+                            level.person.back(level.person.person, False)
+                            level.weapon.back(False, level.weapon.weapon)
 
-                    if event.key == player2[1] and level.person.block:
-                        level.person.block = False
-                        level.weapon.block = False
-                        level.person.animation_active = False
-                        level.weapon.animation_active = False
-                        level.person.back(level.person.person, False)
-                        level.weapon.back(False, level.weapon.weapon)
+                    #
+                    #
+                    #
+                    # здесь должен быть "искусственный интелект", но до сдачи остался 1 день, поэтому его не будет
+                    #
+                    #
+                    #
+                    #
+                    #
+                    # if not level.enemy.animation_active or not level.enemy_weapon.animation_active:
+                    #     a = random.randint(0,6)
+                    #
+                    #     if a == 0:
+                    #         level.person2.normal_weapon_punch = True
+                    #         level.weapon2.normal_weapon_punch = True
+                    #         level.person2.animation_active = True
+                    #         level.weapon2.animation_active = True
+                    #
+                    #     if a == 1:
+                    #         level.person2.block = True
+                    #         level.weapon2.block = True
+                    #         level.person2.animation_active = True
+                    #         level.weapon2.animation_active = True
+                    #     if a== 2:
+                    #         level.person2.animation_active = True
+                    #         level.weapon2.animation_active = True
+                    #         level.person2.sitting = True
+                    #         level.weapon2.sitting = True
+                    #
+                    #     if a == 3:
+                    #         level.person2.animation_active = True
+                    #         level.weapon2.animation_active = True
+                    #         level.person2.jump = True
+                    #         level.weapon2.jump = True
+                    #     if a== 4:
+                    #         level.person2.super_punch = True
+                    #         level.weapon2.super_punch = True
+                    #         level.person2.animation_active = True
+                    #         level.weapon2.animation_active = True
+                    #     if a== 5:
+                    #         level.person2.look_right = True
+                    #         level.weapon2.look_right = True
+                    #         level.person2.back(level.person.person, False)
+                    #         level.weapon2.back(False, level.weapon.weapon)
+                    #         level.person2.walk = True
+                    #         level.weapon2.walk = True
+                    #         level.person2.animation_active = True
+                    #         level.weapon2.animation_active = True
+                    #     elif a == 6:
+                    #         level.person2.look_right = False
+                    #         level.weapon2.look_right = False
+                    #         level.person2.back(level.person.person, False)
+                    #         level.weapon2.back(False, level.weapon.weapon)
+                    #         level.person2.walk = True
+                    #         level.weapon2.walk = True
+                    #         level.person2.animation_active = True
+                    #         level.weapon2.animation_active = True
+                    #     #level.enemy.enemy_action = True
+                    #     level.person2.walk = False
+                    #     level.weapon2.walk = False
+                    #     level.person2.animation_active = False
+                    #     level.weapon2.animation_active = False
+                    #     level.person2.back(level.person2.person, False)
+                    #     level.weapon2.back(False, level.weapon2.weapon)
+                    #     level.person2.sitting = False
+                    #     level.weapon2.sitting = False
+                    #     level.person2.block = False
+                    #     level.weapon2.block = False
 
-            screen.fill((0, 0, 0))
-            keys = pygame.key.get_pressed()
-            if level.person.animation_active:
-                if level.person.walk or level.person.jump:
-                    if keys[player2[6]]:
-                        level.person.rect.x -= level.person.speed
-                        level.weapon.rect.x -= level.person.speed
-                    if keys[player2[5]]:
-                        level.person.rect.x += level.person.speed
-                        level.weapon.rect.x += level.person.speed
-                level.person.animation()
-                level.weapon.animation()
-            background.bliting()
-            all_sprites.draw(screen)
-            all_sprites.update(screen)
+
+                screen.fill((0, 0, 0))
+                keys = pygame.key.get_pressed()
+                if level.person.animation_active:
+                    if level.person.walk or level.person.jump:
+                        if keys[player2[6]]:
+                            level.person.rect.x -= level.person.speed
+                            level.weapon.rect.x -= level.person.speed
+                        if keys[player2[5]]:
+                            level.person.rect.x += level.person.speed
+                            level.weapon.rect.x += level.person.speed
+                    level.person.animation()
+                    level.weapon.animation()
+                if pygame.sprite.collide_mask(level.enemy, level.weapon) and level.weapon.animation_active and not level.person.walk and not level.person.sitting:
+                    if level.enemy.block:
+                        level.health_bar_player2.lives -= 1
+                    else:
+                        level.health_bar_player2.lives -= 2
+                if level.health_bar_player2.lives <= 0:
+                    winner = "player 1"
+                background.bliting()
+                level.health_bar_player.blitting(1)
+                level.health_bar_player2.blitting(2)
+                all_sprites.draw(screen)
+                all_sprites.update(screen)
+            else:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT or event.type ==pygame.KEYDOWN:
+                        running = False
+                        menu_running = False
+                        game_mode = -1
+                text = font.render("демо версия закончена", True, (0, 255, 0))
+                screen.blit(text, (0, 0))
+                text = font.render(
+                    "если вы хотите продолжения, то проспонсиуйте проект на счет сбербанк",
+                    True, (0, 255, 0))
+                screen.blit(text, (0, 100))
+                text = font.render(
+                    "4276320012438900",
+                    True, (0, 255, 0))
+                screen.blit(text, (0, 300))
+                text = font.render(
+                    "нажмите любую кнопку",
+                    True, (0, 255, 0))
+                screen.blit(text, (0, 400))
+
             clock.tick(fps)
             pygame.display.update((0, 0, screen_width, screen_height))
             pygame.display.set_caption(str(clock.get_fps()))
