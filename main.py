@@ -1116,6 +1116,7 @@ while running:
                                 name = input()
                                 a = open("data/scores.txt", mode="a", encoding="UTF-8")
                                 a.write("\n" + name + ": " + str(scores))
+                                a.close()
                 game_overs.draw(screen)
                 game_over.animation()
                 if game_over.now_frame >= 12:
